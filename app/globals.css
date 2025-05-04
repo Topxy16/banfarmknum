@@ -8,14 +8,14 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-kanit); 
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #497248;
-    --foreground: #02542D;
+    --background: #F3EAE6;
+    --foreground: #3D2B28;
   }
 }
 
@@ -39,12 +39,39 @@ body {
     background: #497248;
   }
   .bg-green-700{
-    background: #39553F;
+    background: #3D2B28;
   }
   .bg-green-600{
     background: #ABBC86;
   }
   .text-orange-900{
     color: #E7B343;
+  }
+  .bg-zinc-100{
+    background: #3D2B28;
+  }
+  .bg-zinc-200{
+    background: #83481D;
+  }
+  .bg-zinc-300{
+    background: #F8D8AF;
+  }
+  .bg-zinc-400{
+    background: #A4CED5;
+  }
+  .bg-zinc-500{
+    background: #257644;
+  }
+  .bg-zinc-600{
+    background: #F3E123;
+  }
+  .bg-zinc-700{
+    background: #F3EAE6;
+  }
+  .bg-zinc-800{
+    background: #FC6B33;
+  }
+  .text-zinc-100{
+    background: #3D2B28;
   }
 }
