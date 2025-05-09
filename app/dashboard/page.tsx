@@ -1,21 +1,32 @@
+import Image from 'next/image'
+import cardwallat from '../../public/08.png'
+import cardtool from '../../public/09.png'
 export default function dashboard() {
     return (
-        <div>
+        <div className="mt-5 justify-center place-items-center">
             <div className="phone font-bold md:hidden">
-                <div className="bg-white shadow-2xl h-45 text-center place-content-center">
-                    <div className="text-4xl">2000</div>
-                    <div className="text-2xl">ยอดขายรายสัปดาห์</div>
+                <div className="relative shadow-xl overflow-hidden w-full max-w-md mx-auto h-45">
+                    <Image
+                        src={cardwallat}
+                        alt="สถิติยอดขาย"
+                        className="opacity-60 object-cover w-full h-full"
+                        fill
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div className="text-4xl font-bold">2000</div>
+                        <div className="text-2xl">ยอดขายรายสัปดาห์</div>
+                    </div>
                 </div>
-                <div className="bg-zinc-800 shadow-2xl h-25 rounded-2xl p-2 m-4 text-white">
+                <div className="bg-zinc-800 shadow-xl h-25 rounded-2xl p-2 m-4 text-white">
                     <div className="text-3xl p-2">ออเดอร์วันนี้</div>
                     <div className="text-2xl pl-5">เนยน้ำตาล 10 ร้านโด่ง...</div>
                 </div>
                 <div className="grid grid-cols-2 m-4 gap-2">
-                    <div className="bg-zinc-400 h-40 rounded-2xl p-2 shadow-2xl">
+                    <div className="bg-zinc-400 h-40 rounded-2xl p-2 shadow-xl">
                         <div className="text-2xl p-2">รายเดือน</div>
                         <div className="text-4xl text-center pt-4">3000</div>
                     </div>
-                    <div className="bg-white h-40 rounded-2xl p-2 shadow-2xl">
+                    <div className="bg-white h-40 rounded-2xl p-2 shadow-xl">
                         <div className="text-2xl p-2">ร้านค้า</div>
                         <div className="place-item-between flex">
                             <div className="text-xl pl-4">1.ร้านโด่ง</div>
@@ -31,8 +42,14 @@ export default function dashboard() {
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-flow-col grid-rows-2 gap-4 bg-white rounded-2xl p-2 m-4 text-white text-2xl shadow-2xl">
-                    <div className="bg-zinc-200 rounded-2xl p-2 h-40 pl-4 w-44 shadow-2xl">
+                <div className="relative overflow-hidden grid grid-flow-col grid-rows-2 gap-4 bg-white rounded-2xl p-2 m-4 text-white text-2xl shadow-xl">
+                    <Image
+                        src={cardtool}
+                        alt="สถิติออเดอร์"
+                        className="opacity-60 object-cover"
+                        fill
+                    />
+                    <div className="bg-zinc-200 rounded-2xl p-2 h-40 pl-4 shadow-xl relative">
                         <div>ออเดอร์</div>
                         <div className="flex place-content-center mt-4">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="black" className="size-19 bg-white rounded-full p-3">
@@ -40,7 +57,7 @@ export default function dashboard() {
                             </svg>
                         </div>
                     </div>
-                    <div className="bg-zinc-600 rounded-2xl p-2 h-40 pl-4 w-44 shadow-2xl">
+                    <div className="bg-zinc-600 rounded-2xl p-2 h-40 pl-4 w-44 shadow-xl relative">
                         <div>แผนที่</div>
                         <div className="flex place-content-center mt-4">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="black" className="size-19 bg-white rounded-full p-3">
@@ -50,7 +67,7 @@ export default function dashboard() {
 
                         </div>
                     </div>
-                    <div className="bg-zinc-500 rounded-2xl p-2 h-40 pl-4 w-44 shadow-2xl">
+                    <div className="bg-zinc-500 rounded-2xl p-2 h-40 pl-4 w-44 shadow-xl relative">
                         <div>สินค้า</div>
                         <div className="flex place-content-center mt-4">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="black" className="size-19 bg-white rounded-full p-3">
@@ -59,7 +76,7 @@ export default function dashboard() {
 
                         </div>
                     </div>
-                    <div className="bg-zinc-300 rounded-2xl p-2 h-40 pl-4 w-44 shadow-2xl">
+                    <div className="bg-zinc-300 rounded-2xl p-2 h-40 pl-4 w-44 shadow-xl relative">
                         <div>ต้นทุนกำไร</div>
                         <div className="flex place-content-center mt-4">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="black" className="size-19 bg-white rounded-full p-3">
@@ -69,6 +86,9 @@ export default function dashboard() {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className='p-2 w-full hidden md:block'>
+                <div className='bg-zinc-100 p-2 pt-4 text-3xl rounded-lg mb-2 text-white font-semibold'>แดชบอร์ด</div>
             </div>
         </div>
     )
