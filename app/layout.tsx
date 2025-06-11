@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Kanit } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const kanit = Kanit({
+  weight: ["400", "700"], // ✅ 700 = bold, 400 = regular
+  subsets: ["thai"], // ✅ รองรับภาษาไทย
+  variable: "--font-kanit", // ✅ ตั้งชื่อ CSS variable
+  display: "swap", // (แนะนำเพื่อให้โหลดเร็ว)
 });
 
 export const metadata: Metadata = {
@@ -25,10 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${kanit.className}`}
       >
-        <nav className="bg-green-700 h-10 text-white p-2 text-lg"><p>บ้านฟาร์มขนม</p></nav>
-        {children}
+        <nav className="bg-zinc-100 h-10 text-white p-2 text-lg"><p>Banfarmknum</p></nav>
+        <div className="mt-10 px-50 font-bold">
+          {children}
+        </div>
+
       </body>
     </html>
   );

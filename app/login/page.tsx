@@ -1,8 +1,5 @@
 import Image from 'next/image'
 import loginimg from '../../public/login.png'
-import userimg from '../../public/User.png'
-import lock from '../../public/Lock.png'
-import icon from '../../public/icon.png'
 export default function Page() {
     return ( 
         <div>
