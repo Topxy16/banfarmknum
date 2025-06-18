@@ -1,5 +1,5 @@
-import OrderTable from '../component/OrderTable'
-import OrderTableP from '../component/OrderTableP'
+import OrderTable from '../component/orderTable'
+import OrderTableP from '../component/orderTablep'
 export default function Page() {
     return (
         <div className="mt-5 justify-center place-items-center">
@@ -26,7 +26,7 @@ export default function Page() {
             </div>
 
             <div className='hidden w-full p-2 md:block'>
-                <div className='bg-zinc-100 p-2 pt-4 text-3xl rounded-lg mb-2 text-white font-semibold'>สัปดาห์นี้</div>
+                <div className='p-2 pt-4 text-3xl rounded-lg mb-2 text-black font-semibold'>สัปดาห์นี้</div>
                 <div className="grid grid-cols-7 gap-4 text-black bg-white rounded-xl text-2xl h-30 shadow-2xl">
                     <div className='rounded-lg p-2'>จันทร์</div>
                     <div className='bg-zinc-800 text-white rounded-lg p-2 pl-5'>

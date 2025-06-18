@@ -1,14 +1,55 @@
+'use client'
+
 import Chart from '../component/chart'
 import Calender from '../component/calender'
 import Piechart from '../component/piechart'
-import SavingGoal from "../component/SavingGoal"
+import SavingGoal from "../component/goal"
+import Alert from "../component/alert"
 import Image from 'next/image'
 import bank from '../../public/bank.jpg'
 import cardwallat from '../../public/08.png'
 import cardtool from '../../public/09.png'
+
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+
 export default function Page() {
+    const [showModal, setShowModal] = useState(false)
+
+    const router = useRouter();
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch('https://3f7e-1-20-61-190.ngrok-free.app/api/products/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // ส่ง token ไปใน header'}
+                    }
+                })
+                const checktoken = await res.json();
+
+                if (checktoken.message == "Unauthorized ! Token expire") {
+                    console.log('ไฟ')
+                    // router.push('/login')
+                    setShowModal(true)
+                }
+            } catch (error) {
+                console.error('Fetch failed:', error);
+            }
+        }
+        fetchData()
+    }, [router]);
+
     return (
         <div>
+
+            <div className="p-4">
+                <Alert message='💰 Token exp' detail='ก๋ายไก่ๆ' show={showModal} onClose={() => setShowModal(false)} />
+                <h1 className="text-xl font-bold">หน้าหลัก</h1>
+            </div>
+
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
             <div className="w-srceen justify-center">
                 <div className="bg-zinc-400 rounded-xl drop-shadow-2xl w-full p-2 mb-4">
@@ -183,13 +224,9 @@ export default function Page() {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="black" className="size-19 bg-white rounded-full p-3">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V13.5Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V18Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V13.5Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V18Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V18Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0 0 12 2.25Z" />
                             </svg>
-
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className='p-2 w-full hidden md:block'>
-                <div className='bg-zinc-100 p-2 pt-4 text-3xl rounded-lg mb-2 text-white font-semibold'>แดชบอร์ด</div>
             </div>
         </div>
     );

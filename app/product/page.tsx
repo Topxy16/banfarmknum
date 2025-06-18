@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import butter from '../../public/butter.png'
 import mu from '../../public/mu.png'
-import ProductTableP from '../component/ProductTableP'
-import ProductTable from '../component/ProductTable'
+import ProductTableP from '../component/productTablep'
+import ProductTable from '../component/productTable'
 
 export default function page() {
     return (
