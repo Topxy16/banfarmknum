@@ -1,10 +1,10 @@
 'use client'
 
-import Chart from '../component/chart'
-import Calender from '../component/calender'
-import Piechart from '../component/piechart'
-import SavingGoal from "../component/goal"
-import Alert from "../component/alert"
+import Chart from '../components/chart'
+import Calender from '../components/calender'
+import Piechart from '../components/piechart'
+import SavingGoal from "../components/goal"
+import Alert from "../components/alert"
 import Image from 'next/image'
 import bank from '../../public/bank.jpg'
 import cardwallat from '../../public/08.png'
@@ -25,14 +25,13 @@ export default function Page() {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // ส่ง token ไปใน header'}
+                        'Authorization': `Bearer ${token}`,
                     }
                 })
                 const checktoken = await res.json();
 
                 if (checktoken.message == "Unauthorized ! Token expire") {
                     console.log('ไฟ')
-                    // router.push('/login')
                     setShowModal(true)
                 }
             } catch (error) {
@@ -44,7 +43,6 @@ export default function Page() {
 
     return (
         <div>
-
             <div className="p-4">
                 <Alert message='💰 Token exp' detail='ก๋ายไก่ๆ' show={showModal} onClose={() => setShowModal(false)} />
                 <h1 className="text-xl font-bold">หน้าหลัก</h1>

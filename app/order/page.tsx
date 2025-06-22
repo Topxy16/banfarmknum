@@ -1,5 +1,5 @@
-import OrderTable from '../component/orderTable'
-import OrderTableP from '../component/orderTablep'
+import OrderTable from '../components/orderTable'
+import OrderTableP from '../components/orderTablep'
 export default function Page() {
     return (
         <div className="mt-5 justify-center place-items-center">
