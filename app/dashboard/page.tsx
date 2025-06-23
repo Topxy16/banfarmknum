@@ -4,7 +4,7 @@ import Chart from '../components/chart'
 import Calender from '../components/calender'
 import Piechart from '../components/piechart'
 import SavingGoal from "../components/goal"
-import Alert from "../components/alert"
+import Alert from "../components/alerttoken"
 import Image from 'next/image'
 import bank from '../../public/bank.jpg'
 import cardwallat from '../../public/08.png'

@@ -2,12 +2,44 @@
 import neyor from '../../public/neyor.png'
 import hamu from '../../public/hamuneyor.png'
 import Image from 'next/image'
-import ProductToggle from './productToggle'
+import { useEffect, useState } from 'react'
+
+type Product = {
+  p_ID: number;
+  p_Name: string;
+  p_Detail: string;
+  p_Price: number;
+  p_Amount: number;
+}
+
+type Category = {
+  c_ID: number;
+  c_Name: string;
+}
+
 export default function Product() {
-    const handleToggle = (newStatus: boolean) => {
-        console.log('สถานะสินค้า:', newStatus ? 'ขายอยู่' : 'สินค้าหมด')
-        // 🔁 TODO: call API เพื่ออัปเดตสถานะสินค้าใน backend
-    }
+
+    const [product, setProduct] = useState<Product[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+
+    useEffect(() => {
+        const getcategory = async () => {
+            const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/categorys/')
+            const resData = await res.json()
+            // console.log(resData.data)
+        }
+        getcategory()
+        const getproduct = async () => {
+            const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/')
+            const resData = await res.json()
+            setProduct(resData.data)
+            console.log(resData.data)
+            console.log(product)
+        }
+        getproduct()
+
+    }, [])
+
     return (
         <div>
             <div className="phone m-2 bg-wi md:hidden">
@@ -56,8 +88,15 @@ export default function Product() {
                         </div>
                         <div className="p-3">
                             <div className='w-50'>
-                                <div>พริกเผาหมูหยอง</div>
-                                <div className='text-sm'>ประเภท : ขนมปังกรอบ</div>
+                                <div>{product.map((product, index) => (
+                                    <div key={index}>
+                                        <div>{product.p_ID}</div>
+                                        <div>{product.p_Name}</div>
+                                        <div>{product.p_Price.toLocaleString()}</div>
+                                        <div>ประเภท : ขนมปังกรอบ</div>
+                                    </div>
+                                ))}
+                                </div>
                             </div>
                             <div className='mt-2'>
                                 <div className="flex text-2xl place-content-end gap-1 mt-5">
@@ -93,7 +132,7 @@ export default function Product() {
                             </div>
                             <div className="p-3">
                                 <div className='w-50'>
-                                    <div>พริกเผาหมูหยอง</div>
+                                    <div></div>
                                     <div className='text-sm'>ประเภท : ขนมปังกรอบ</div>
                                 </div>
                                 <div className='mt-2'>
