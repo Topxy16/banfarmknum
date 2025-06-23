@@ -2,7 +2,7 @@ import Order from '../components/order'
 
 export default function Page() {
     return (
-        <div className="mt-5 justify-center place-items-center">
+        <div className="">
             <div className='phone w-100 md:hidden'>
                 <div className='bg-zinc-100 p-2 text-4xl rounded-lg mb-2 text-white font-semibold'>ออเดอร์</div>
                 <div className='text-center flex gap-2'>

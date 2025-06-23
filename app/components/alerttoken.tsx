@@ -12,9 +12,7 @@ type TokenModalProps = {
 
 export default function TokenModal({ message, detail, show, onClose }: TokenModalProps) {
     const router = useRouter()
-
     if (!show) return null
-
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm">
             <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm text-center">

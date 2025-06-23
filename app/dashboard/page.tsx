@@ -1,5 +1,4 @@
 'use client'
-
 import Chart from '../components/chart'
 import Calender from '../components/calender'
 import Piechart from '../components/piechart'
@@ -42,10 +41,9 @@ export default function Page() {
     }, [router]);
 
     return (
-        <div>
+        <div className='px-15'>
             <div className="p-4">
-                <Alert message='💰 Token exp' detail='ก๋ายไก่ๆ' show={showModal} onClose={() => setShowModal(false)} />
-                <h1 className="text-xl font-bold">หน้าหลัก</h1>
+                <Alert message='💰 Token exp' detail='ก๋ายไก่ๆ' show={showModal} onClose={() => setShowModal(false)} />              
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
