@@ -9,7 +9,7 @@ export default function Page() {
     const login = async () => {
         console.log("user = " + username)
         console.log("pass = " + password)
-        const res = await fetch('https://3f7e-1-20-61-190.ngrok-free.app/api/auth/login', {
+        const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/auth/login', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ 'username': username, 'password': password }),
@@ -22,7 +22,7 @@ export default function Page() {
     }
     const logincheck = async () => {
         const token = localStorage.getItem('token');
-        const res = await fetch('https://3f7e-1-20-61-190.ngrok-free.app/api/products/', {
+        const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/', {
             headers: { authorization: `Bearer ${token}` }
         })
         const resData = await res.json()

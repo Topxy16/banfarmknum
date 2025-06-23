@@ -1,11 +1,40 @@
 'use client'
 import Product from '../components/product'
 import AddProduct from '../components/addproduct'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-
+    type ProductType = {
+        p_ID: Number,
+        p_Name: String,
+        p_Detail: String,
+        p_Price: Number,
+        p_Amount: Number,
+        c_Name: String,
+        p_Status: Number,
+        p_Img : String
+    }
+    type CategoryType = {
+        c_ID : Number,
+        c_Name : String 
+    }
 export default function page() {
     const [showModal, setShowModal] = useState(false)
+    const [categoryData , setCategory] = useState<CategoryType[]>([])
+    const [productData, setProduct] = useState<ProductType[]>([])
+    useEffect (()=>{
+        const fetchProduct = async () => {
+            const res = await fetch(`https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/`)
+            const resData = await res.json()
+            setProduct(resData.data)
+        }
+        const fetchCategory = async () => {
+            const res = await fetch(`https://bnvw3t5t-8080.asse.devtunnels.ms/api/categorys/`)
+            const resData = await res.json()
+            setCategory(resData.data)
+        }
+        fetchCategory()
+        fetchProduct()
+    },[])
     return (
         <div className=''>
 
@@ -30,14 +59,12 @@ export default function page() {
                 </div>
             </div>
 
-
-
-
             <div>
-                <AddProduct show={showModal} onClose={() => setShowModal(false)} />
+                <AddProduct   Category={categoryData} show={showModal} onClose={() => setShowModal(false)} />
                 <div className=''>
                     <div>
-                        <Product></Product>
+                        {/* {product.map((item,index)=> <div key={index}> {item.p_Name} </div>  )} */}
+                        <Product product={productData} />
                     </div>
                 </div> 
             </div>
