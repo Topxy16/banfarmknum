@@ -5,13 +5,18 @@ import React, { useState } from 'react'
 type AddProductModalProps = {
   show: boolean
   onClose: () => void
+  Category: CategoryType[];
 }
-
-export default function AddProductModal({ show, onClose }: AddProductModalProps) {
+type CategoryType = {
+  c_ID : number,
+  c_Name : string
+}
+export default function AddProductModal({ show, onClose , Category }: AddProductModalProps ) {
   const [p_Name, setName] = useState('')
   const [p_Detail, setDetail] = useState('')
   const [p_Price, setPrice] = useState('')
   const [p_Amount, setAmount] = useState('')
+  const [c_ID, setCategory] = useState(0)
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   if (!show) return null
@@ -35,12 +40,19 @@ export default function AddProductModal({ show, onClose }: AddProductModalProps)
     if (image) formData.append('p_Image', image)
 
     try {
-      const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/add', {
+      const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/addProduct', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          'content-type': 'application/json'
         },
-        body: formData,
+        body: JSON.stringify({
+                'p_Name': p_Name,
+                'p_Detail': p_Detail,
+                'p_Price': p_Price,
+                'p_Amount': p_Amount,
+                'c_ID': c_ID
+            }), 
       })
       const data = await res.json()
       console.log('✅ เพิ่มสินค้าแล้ว:', data)
@@ -74,6 +86,15 @@ export default function AddProductModal({ show, onClose }: AddProductModalProps)
             value={p_Price}
             onChange={(e) => setPrice(e.target.value)}
           />
+          <select name=""  value={c_ID} id="" onChange={(e )=> (setCategory(Number(e.target.value)))}>  
+            <option value={Number("0")}> เลือกหมวดหมู่ </option>
+            {Category.map( (item , index) => (
+              
+            <option key ={index} value={item.c_ID}>   
+                  {item.c_Name}
+            </option>
+            ) )}
+          </select>
           <input
             type="number"
             placeholder="จำนวน"
