@@ -1,6 +1,5 @@
 'use client'
-import ProductTableP from '../components/productTablep'
-import ProductTable from '../components/productTable'
+import Product from '../components/product'
 import AddProduct from '../components/addproduct'
 import { useState } from 'react'
 
@@ -36,16 +35,11 @@ export default function page() {
 
             <div>
                 <AddProduct show={showModal} onClose={() => setShowModal(false)} />
-                <div className='phone flex place-content-center md:hidden'>
+                <div className=''>
                     <div>
-                        <ProductTableP></ProductTableP>
+                        <Product></Product>
                     </div>
-                </div>
-                <div className='hidden md:block'>
-                    <div>
-                        <ProductTable></ProductTable>
-                    </div>
-                </div>
+                </div> 
             </div>
         </div>
     )

@@ -35,7 +35,7 @@ export default function Page() {
             || tel === ''
             || fname === ''
             || lname === ''
-            || repassword === '' 
+            || repassword === ''
             || password !== repassword) {
             setButtonState(true)
         } else {
@@ -67,31 +67,36 @@ export default function Page() {
             setShowmessage(false)
         }
     }
-
     return (
         <div>
             <div className="mt-10 flex justify-center">
                 <div className=' md:w-180'>
-                    <div className='bg-gray-100 p-4 rounded-xl flex md:gap-4'>
+                    <div className='bg-amber-100 p-4 rounded-xl flex md:gap-4'>
                         <div>
                             <Image
                                 src={loginimg}
                                 alt="Picture of the author"
-                                className='rounded-xl hidden md:block'
+                                className='rounded-xl hidden md:block w-full'
                             />
                         </div>
-                        <div className='bg-white p-10 rounded-xl md:w-100'>
+                        <div className='bg-white p-10 rounded-xl md:w-150'>
                             <div className='text-4xl text-center'>สมัครสมาชิก</div>
-                            <div className='mt-5 text-lg gird grid-cols-1 '>
+                            <div className='mt-5 text-lg'>
                                 <div>
                                     <input type="text" placeholder="ชื่อผู้ใช้งาน" className='border-b-3 border-green-950 mb-4' onChange={(e) => { checkuser(e.target.value); setName(e.target.value) }} />
                                     <div>{showcheckmessage && <p>{checkmessage}</p>}</div>
 
                                 </div>
-                                <div className='flex gap-2'>
-                                    <input type="text" placeholder="ชื่อ" className='border-b-3 border-green-950 w-1/2 mb-4' onChange={(e) => { setFname(e.target.value) }} />
-                                    <input type="text" placeholder="สกุล" className='border-b-3 border-green-950 w-1/2 mb-4' onChange={(e) => { setLname(e.target.value) }} />
+                                <div className='gird gird-cols-2 gap-2'>
+                                    <div className=''>
+                                        <input type="text" placeholder="ชื่อ" className='border-b-3 border-green-950 mb-4' onChange={(e) => { setFname(e.target.value) }} />
+                                    </div>
+                                    <div className=''>
+                                        <input type="text" placeholder="สกุล" className='border-b-3 border-green-950 mb-4' onChange={(e) => { setLname(e.target.value) }} />
+                                    </div>
                                 </div>
+
+
 
                                 <div>
                                     <input type="text" placeholder="เบอร์โทรศัพท์" className='border-b-3 border-green-950 mb-4' onChange={(e) => { setTel(e.target.value) }} />

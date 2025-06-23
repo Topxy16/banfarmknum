@@ -1,9 +1,8 @@
-import OrderTable from '../components/orderTable'
-import OrderTableP from '../components/orderTablep'
+import Order from '../components/order'
+
 export default function Page() {
     return (
         <div className="mt-5 justify-center place-items-center">
-
             <div className='phone w-100 md:hidden'>
                 <div className='bg-zinc-100 p-2 text-4xl rounded-lg mb-2 text-white font-semibold'>ออเดอร์</div>
                 <div className='text-center flex gap-2'>
@@ -22,9 +21,8 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-                <OrderTableP></OrderTableP>
+                <Order></Order>
             </div>
-
             <div className='hidden w-full p-2 md:block'>
                 <div className='p-2 pt-4 text-3xl rounded-lg mb-2 text-black font-semibold'>สัปดาห์นี้</div>
                 <div className="grid grid-cols-7 gap-4 text-black bg-white rounded-xl text-2xl h-30 shadow-2xl">
@@ -46,12 +44,10 @@ export default function Page() {
                             <div className=''>ร้านลุงชัย</div>
                         </div>
                     </div>
-
                     <div className='rounded-lg p-2'>ศุกร์</div>
                     <div className='rounded-lg p-2'>เสาร์</div>
                     <div className='rounded-lg p-2'>อาทิตย์</div>
                 </div>
-
                 <div className='flex gap-2'>
                     <div className='bg-zinc-400 rounded-lg text-white font-semibold text-4xl shadow-xl p-2 mt-2 basis-full'>
                         <div className='place-content-between flex'>
@@ -72,17 +68,10 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-
                 <div className='mt-2'>
-                    <OrderTable></OrderTable>
+                    <Order></Order>
                 </div>
-
-
             </div>
-
-
-
-
         </div>
 
     );
