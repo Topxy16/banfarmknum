@@ -5,13 +5,13 @@ import React, { useState } from 'react'
 type AddProductModalProps = {
   show: boolean
   onClose: () => void
-  Category: CategoryType[];
+  category: CategoryType[];
 }
 type CategoryType = {
   c_ID: number,
   c_Name: string
 }
-export default function AddProductModal({ show, onClose, Category }: AddProductModalProps) {
+export default function AddProductModal({ show, onClose, category }: AddProductModalProps) {
   const [p_Name, setName] = useState('')
   const [p_Detail, setDetail] = useState('')
   const [p_Price, setPrice] = useState('')
@@ -31,13 +31,6 @@ export default function AddProductModal({ show, onClose, Category }: AddProductM
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
-
-    const formData = new FormData()
-    formData.append('p_Name', p_Name)
-    formData.append('p_Detail', p_Detail)
-    formData.append('p_Price', p_Price)
-    formData.append('p_Amount', p_Amount)
-    if (image) formData.append('p_Image', image)
 
     try {
       const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/addProduct', {
@@ -88,7 +81,7 @@ export default function AddProductModal({ show, onClose, Category }: AddProductM
           />
           <select className='w-full mt-2 rounded-lg p-1.5 bg-gray-200' name="" value={c_ID} id="" onChange={(e) => (setCategory(Number(e.target.value)))}>
             <option value={Number("0")}> เลือกหมวดหมู่ </option>
-            {Category.map((item, index) => (
+            {category.map((item, index) => (
 
               <option key={index} value={item.c_ID}>
                 {item.c_Name}
@@ -102,10 +95,10 @@ export default function AddProductModal({ show, onClose, Category }: AddProductM
             value={p_Amount}
             onChange={(e) => setAmount(e.target.value)}
           />
-          
-            <div className='mt-1'>อัปโหลดรูปภาพ</div>
-            <input type="file" accept="image/*" onChange={handleImage} className="w-50 bg-gray-200 p-1.5 rounded-lg" />
-          
+
+          <div className='mt-1'>อัปโหลดรูปภาพ</div>
+          <input type="file" accept="image/*" onChange={handleImage} className="w-50 bg-gray-200 p-1.5 rounded-lg" />
+
 
           {preview && (
             <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded" />

@@ -1,9 +1,46 @@
+'use client'
 import Order from '../components/order'
+import { useEffect, useState } from 'react'
+
+type OrderType = {
+    o_ID: number,
+    u_ID: number,
+    o_total: number,
+    o_date: string,
+    o_endDate: string,
+    o_image: string,
+    o_status: number,
+}
+type OrderItemType = {
+    oi_ID: number,
+    o_ID: number,
+    p_ID: number,
+    oi_amount: number,
+    oi_price: number,
+}
 
 export default function Page() {
+    const [orderData, setOder] = useState<OrderType[]>([])
+    const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
+    useEffect(() => {
+        const fetchOrder = async () => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/`)
+            const resData = await res.json()
+            setOder(resData.data)
+            console.log(res)
+        }
+        // const fetchOrderItem = async () => {
+        //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders_item/`)
+        //     const resData = await res.json()
+        //     setOrderItem(resData.data)
+        // }        
+        fetchOrder()
+        // fetchOrderItem()
+    }, [])
     return (
-        <div className="">
-            <div className='phone w-100 md:hidden'>
+        <div>
+            
+            <div className='phone md:hidden'>
                 <div className='bg-zinc-100 p-2 text-4xl rounded-lg mb-2 text-white font-semibold'>ออเดอร์</div>
                 <div className='text-center flex gap-2'>
                     <div className='bg-zinc-400 rounded-lg text-white font-semibold text-4xl pt-10 shadow-xl w-60'>
@@ -21,7 +58,7 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-                <Order></Order>
+                <Order order={orderData}/>
             </div>
             <div className='hidden w-full p-2 md:block'>
                 <div className='p-2 pt-4 text-3xl rounded-lg mb-2 text-black font-semibold'>สัปดาห์นี้</div>
@@ -69,7 +106,7 @@ export default function Page() {
                     </div>
                 </div>
                 <div className='mt-2'>
-                    <Order></Order>
+                    <Order order={orderData}/>
                 </div>
             </div>
         </div>

@@ -1,89 +1,67 @@
 'use client'
-export default function Order() {
+import { useState } from "react"
+import AddOrder from '../components/order_add'
+import OrderDetaill from '../components/order_detail'
+
+type OrderType = {
+    o_ID: number,
+    u_ID: number,
+    o_total: number,
+    o_date: string,
+    o_endDate: string,
+    o_image: string,
+    o_status: number,
+}
+type OrderItemType = {
+    oi_ID: number,
+    o_ID: number,
+    p_ID: number,
+    oi_amount: number,
+    oi_price: number,
+}
+
+export default function Order({ order }: { order: OrderType[] }) {
+    const [showorder_add, setShoworder_add] = useState(false)
+    const [showorder_detail, setShoworder_detail] = useState(false)
     return (
         <div>
+            <AddOrder show={showorder_add} onClose={() => setShoworder_add(false)} />
+            <OrderDetaill show={showorder_detail} onClose={() => setShoworder_detail(false)} />
+
             <div className="phone md:hidden">
-                <div className="bg-white rounded-xl text-black text-xl mt-2 p-4 w-100 shadow-xl">
-                    <div className="flex gap-3 text-xl pb-1">
-                        <div className="bg-zinc-600 text-black font-semibold px-1 rounded-lg">#0001</div>
-                        <div className="bg-zinc-600 text-black px-1 rounded-lg">ร้านลุงชัย</div>
-                        <div className="bg-green-200 text-green-900 px-1 rounded-lg">สถานะ : จัดส่งแล้ว</div>
-                    </div>
-                    <div className="pl-2">เนยน้ำตาล 10 + พริกเผาหมูหยอง 10</div>
-                    <div className="flex text-3xl place-content-end mt-2">
-                        <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </div>
-                        <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </div>
-                        <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-white rounded-xl text-black text-xl mt-2 p-4 w-100 shadow-xl">
-                    <div className="flex gap-3 text-xl pb-1">
-                        <div className="bg-zinc-600 text-black font-semibold px-1 rounded-lg">#0001</div>
-                        <div className="bg-zinc-600 text-black px-1 rounded-lg">ร้านลุงชัย</div>
-                        <div className="bg-green-200 text-green-900 px-1 rounded-lg">สถานะ : จัดส่งแล้ว</div>
-                    </div>
-                    <div className="pl-2">เนยน้ำตาล 10 + พริกเผาหมูหยอง 10</div>
-                    <div className="flex text-3xl place-content-end mt-2">
-                        <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </div>
-                        <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </div>
-                        <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-white rounded-xl text-black text-xl mt-2 p-4 w-100 shadow-xl">
-                    <div className="flex gap-3 text-xl pb-1">
-                        <div className="bg-zinc-600 text-black font-semibold px-1 rounded-lg">#0001</div>
-                        <div className="bg-zinc-600 text-black px-1 rounded-lg">ร้านลุงชัย</div>
-                        <div className="bg-green-200 text-green-900 px-1 rounded-lg">สถานะ : จัดส่งแล้ว</div>
-                    </div>
-                    <div className="pl-2">เนยน้ำตาล 10 + พริกเผาหมูหยอง 10</div>
-                    <div className="flex text-3xl place-content-end mt-2">
-                        <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </div>
-                        <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </div>
-                        <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-gray-300 rounded-2xl p-2 mt-2 flex place-content-center shadow-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-13">
+                <button className="w-full bg-green-400 rounded-2xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
+                    <div>เพิ่มออเดอร์</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
+                </button>
+                <div className="bg-white rounded-xl text-black text-xl mt-2 p-4 shadow-xl" onClick={()=>{setShoworder_detail(true)}}>
+                    <div className="flex gap-3 text-xl pb-1">
+                        <div className="bg-zinc-600 text-black font-semibold px-1 rounded-lg">#0001</div>
+                        <div className="bg-zinc-600 text-black px-1 rounded-lg">ชื่อคนสั่ง</div>
+                        <div className="bg-green-200 text-green-900 px-1 rounded-lg">สถานะ : จัดส่งแล้ว</div>
+                    </div>
+                    <div className="flex place-content-between mt-2 items-center">
+                        <div className="bg-amber-600 rounded-lg px-1 text-white">ต้องส่ง : 02/07/2025</div>
+                        <div className="flex">
+                            <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </div>
+                            <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </div>
+                            <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
             <div className="hidden md:block">
                 <div className="relative overflow-x-auto shadow-md rounded-xl">
@@ -91,238 +69,124 @@ export default function Order() {
                         <thead className="text-lg text-white uppercase bg-zinc-100">
                             <tr>
                                 <th scope="col" className="px-6 py-3 ">
-                                    วันที่สั่ง
-                                </th>
-                                <th scope="col" className="px-6 py-3 ">
                                     เลขออร์เดอร์
                                 </th>
                                 <th scope="col" className="px-6 py-3 ">
-                                    สินค้า
+                                    วันที่สั่ง
                                 </th>
                                 <th scope="col" className="px-6 py-3 ">
-                                    จำนวน
+                                    ชื่อผู้สั่งสินค้า
                                 </th>
                                 <th scope="col" className="px-6 py-3 ">
-                                    ร้าน
+                                    เบอร์โทรศัพท์
                                 </th>
+
                                 <th scope="col" className="px-6 py-3 ">
                                     วันที่ต้องส่ง
                                 </th>
                                 <th scope="col" className="px-6 py-3 ">
                                     สถานะออเดอร์
                                 </th>
-                                <th scope="col" className="px-6 py-3 ">
-                                    เครื่องมือ
+                                <th scope="col" className="px-6 py-3 flex place-content-between text-center">
+                                    <div className="mt-1.5">เครื่องมือ</div>
+                                    <button onClick={() => setShoworder_add(true)} className='bg-green-900 hover:bg-green-700 rounded-xl p-1 text-white flex items-center'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+
+                                    </button>
                                 </th>
+
                             </tr>
+
                         </thead>
                         <tbody>
+                            {order.map((item, index) => (
+                                <tr key={index} className="bg-white text-black">
+                                    <th scope="row" className="px-6 py-4">
+                                        {item.o_ID}
+                                    </th>
+                                    <td className="px-6 py-4">
+                                        {item.o_date}
+                                    </td>
+                                    <td className="px-6 py-4">
+
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {item.o_endDate}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {item.o_status}
+                                    </td>
+                                    <td className="px-6 py-4 flex">
+                                        <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </div>
+                                        <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </div>
+                                        <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                            </svg>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                             <tr className="bg-white text-black">
                                 <th scope="row" className="px-6 py-4">
-                                    05/03/2568
+                                    #3213421
                                 </th>
                                 <td className="px-6 py-4">
-                                    #0001
+                                    21/02/25
                                 </td>
                                 <td className="px-6 py-4">
-                                    เนยน้ำตาล
+                                    พี่ชาวี
                                 </td>
                                 <td className="px-6 py-4">
-                                    10
+                                    0926166623
                                 </td>
                                 <td className="px-6 py-4">
-                                    ร้านลุงชัย
-                                </td>
-                                <td className="px-6 py-4">
-                                    07/03/2568
+                                    21/03/25
                                 </td>
                                 <td className="px-6 py-4">
                                     ส่งแล้ว
                                 </td>
-                                <td className="px-6 py-4 flex">
-                                    <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
+                                <td className="px-6 py-4 flex place-content-between">
+                                    <div className="flex">
+                                        <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </div>
+                                        <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </div>
+                                        <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                            </svg>
+                                        </div>
                                     </div>
-                                    <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    <button className="mt-4 mr-1" onClick={() => setShoworder_detail(true)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 rounded-4xl hover:bg-gray-300">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                         </svg>
-                                    </div>
-                                    <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </div>
+                                    </button>
                                 </td>
                             </tr>
-                            <tr className="bg-white text-black">
-                                <th scope="row" className="px-6 py-4">
-                                    05/03/2568
-                                </th>
-                                <td className="px-6 py-4">
-                                    #0001
-                                </td>
-                                <td className="px-6 py-4">
-                                    เนยน้ำตาล
-                                </td>
-                                <td className="px-6 py-4">
-                                    10
-                                </td>
-                                <td className="px-6 py-4">
-                                    ร้านลุงชัย
-                                </td>
-                                <td className="px-6 py-4">
-                                    07/03/2568
-                                </td>
-                                <td className="px-6 py-4">
-                                    ส่งแล้ว
-                                </td>
-                                <td className="px-6 py-4 flex">
-                                    <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr className="bg-white text-black">
-                                <th scope="row" className="px-6 py-4">
-                                    05/03/2568
-                                </th>
-                                <td className="px-6 py-4">
-                                    #0001
-                                </td>
-                                <td className="px-6 py-4">
-                                    เนยน้ำตาล
-                                </td>
-                                <td className="px-6 py-4">
-                                    10
-                                </td>
-                                <td className="px-6 py-4">
-                                    ร้านลุงชัย
-                                </td>
-                                <td className="px-6 py-4">
-                                    07/03/2568
-                                </td>
-                                <td className="px-6 py-4">
-                                    ส่งแล้ว
-                                </td>
-                                <td className="px-6 py-4 flex">
-                                    <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr className="bg-white text-black">
-                                <th scope="row" className="px-6 py-4">
-                                    05/03/2568
-                                </th>
-                                <td className="px-6 py-4">
-                                    #0001
-                                </td>
-                                <td className="px-6 py-4">
-                                    เนยน้ำตาล
-                                </td>
-                                <td className="px-6 py-4">
-                                    10
-                                </td>
-                                <td className="px-6 py-4">
-                                    ร้านลุงชัย
-                                </td>
-                                <td className="px-6 py-4">
-                                    07/03/2568
-                                </td>
-                                <td className="px-6 py-4">
-                                    ส่งแล้ว
-                                </td>
-                                <td className="px-6 py-4 flex">
-                                    <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr className="bg-white text-black">
-                                <th scope="row" className="px-6 py-4">
-                                    05/03/2568
-                                </th>
-                                <td className="px-6 py-4">
-                                    #0001
-                                </td>
-                                <td className="px-6 py-4">
-                                    เนยน้ำตาล
-                                </td>
-                                <td className="px-6 py-4">
-                                    10
-                                </td>
-                                <td className="px-6 py-4">
-                                    ร้านลุงชัย
-                                </td>
-                                <td className="px-6 py-4">
-                                    07/03/2568
-                                </td>
-                                <td className="px-6 py-4">
-                                    ส่งแล้ว
-                                </td>
-                                <td className="px-6 py-4 flex">
-                                    <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </div>
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
+
                 </div>
-
             </div>
-
         </div>
     )
 }

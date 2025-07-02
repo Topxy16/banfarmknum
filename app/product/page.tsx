@@ -1,34 +1,34 @@
 'use client'
 import Product from '../components/product'
-import AddProduct from '../components/addproduct'
+import AddProduct from '../components/product_add'
 import { useEffect, useState } from 'react'
 
     type ProductType = {
-        p_ID: Number,
-        p_Name: String,
-        p_Detail: String,
-        p_Price: Number,
-        p_Amount: Number,
-        c_Name: String,
-        p_Status: Number,
-        p_Img : String
+        p_ID: number,
+        p_Name: string,
+        p_Detail: string,
+        p_Price: number,
+        p_Amount: number,
+        c_Name: string,
+        p_Status: number,
+        p_Img : string
     }
     type CategoryType = {
-        c_ID : Number,
-        c_Name : String 
+        c_ID : number,
+        c_Name : string 
     }
 export default function page() {
-    const [showModal, setShowModal] = useState(false)
+    const [showproduct_add, setShowproduct_add] = useState(false)
     const [categoryData , setCategory] = useState<CategoryType[]>([])
     const [productData, setProduct] = useState<ProductType[]>([])
     useEffect (()=>{
         const fetchProduct = async () => {
-            const res = await fetch(`https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/`)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/`)
             const resData = await res.json()
             setProduct(resData.data)
         }
         const fetchCategory = async () => {
-            const res = await fetch(`https://bnvw3t5t-8080.asse.devtunnels.ms/api/categorys/`)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categorys/`)
             const resData = await res.json()
             setCategory(resData.data)
         }
@@ -36,8 +36,7 @@ export default function page() {
         fetchProduct()
     },[])
     return (
-        <div className=''>
-
+        <div>
             <div className="bg-white rounded-2xl p-1.5 w-full flex">
                 <div className="bg-zinc-400 flex w-full p-1.5 rounded-2xl place-items-center">
                     <button>
@@ -51,7 +50,7 @@ export default function page() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
                     </button>
-                    <button onClick={() => setShowModal(true)} className='bg-white rounded-xl p-1'>
+                    <button onClick={() => setShowproduct_add(true)} className='bg-green-900 hover:bg-green-700 rounded-xl p-1 text-white'>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
@@ -60,7 +59,7 @@ export default function page() {
             </div>
 
             <div>
-                <AddProduct   Category={categoryData} show={showModal} onClose={() => setShowModal(false)} />
+                <AddProduct category = {categoryData} show={showproduct_add} onClose={() => setShowproduct_add(false)} />
                 <div className=''>
                     <div>
                         {/* {product.map((item,index)=> <div key={index}> {item.p_Name} </div>  )} */}
