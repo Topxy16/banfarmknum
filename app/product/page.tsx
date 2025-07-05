@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
         p_Price: number,
         p_Amount: number,
         c_Name: string,
+        c_ID : number,
         p_Status: number,
         p_Img : string
     }
@@ -63,7 +64,7 @@ export default function page() {
                 <div className=''>
                     <div>
                         {/* {product.map((item,index)=> <div key={index}> {item.p_Name} </div>  )} */}
-                        <Product product={productData} />
+                        <Product product={productData} propsCategory={categoryData}  />
                     </div>
                 </div> 
             </div>
