@@ -1,26 +1,39 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 
 type UpdateProductModalProps = {
   show: boolean
   onClose: () => void
-  Category: CategoryType[];
+  propsCategory : CategoryType[]
+  productUpdate : ProductType 
 }
 type CategoryType = {
   c_ID: number,
-  c_Name: string
+  c_Name: string 
 }
-export default function UpdateProductModal({ show, onClose, Category }: UpdateProductModalProps) {
-  const [p_Name, setName] = useState('')
-  const [p_Detail, setDetail] = useState('')
-  const [p_Price, setPrice] = useState('')
+type ProductType = {
+    p_ID: number,
+    p_Name: string,
+    p_Detail: string,
+    c_ID : number,
+    p_Price: number,
+    p_Amount: number,
+    c_Name: string,
+    p_Status: number,
+    p_Img: string,
+}
+export default function UpdateProductModal({ show, propsCategory ,productUpdate ,onClose}: UpdateProductModalProps) {
+  const [p_Name, setName] = useState(productUpdate.p_Name)
+  const [p_Detail, setDetail] = useState(productUpdate.p_Detail)
+  const [p_Price, setPrice] = useState(productUpdate.p_Price)
   const [p_Amount, setAmount] = useState('')
-  const [c_ID, setCategory] = useState(0)
+  const [c_ID, setCategory] = useState(productUpdate.c_ID)
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  if (!show) return null
+  //console.log(productUpdate)
 
+  if (!show) return null
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -31,22 +44,22 @@ export default function UpdateProductModal({ show, onClose, Category }: UpdatePr
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
-
-    const formData = new FormData()
-    formData.append('p_Name', p_Name)
-    formData.append('p_Detail', p_Detail)
-    formData.append('p_Price', p_Price)
-    formData.append('p_Amount', p_Amount)
-    if (image) formData.append('p_Image', image)
+    // const formData = new FormData()
+    // formData.append('p_Name', p_Name)
+    // formData.append('p_Detail', p_Detail)
+    // formData.append('p_Price', p_Price)
+    // formData.append('p_Amount', p_Amount)
+    // if (image) formData.append('p_Image', image)
 
     try {
-      const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/UpdateProduct', {
-        method: 'POST',
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/updateProduct`, {
+        method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
           'content-type': 'application/json'
         },
         body: JSON.stringify({
+          'p_ID': productUpdate.p_ID,
           'p_Name': p_Name,
           'p_Detail': p_Detail,
           'p_Price': p_Price,
@@ -55,7 +68,12 @@ export default function UpdateProductModal({ show, onClose, Category }: UpdatePr
         }),
       })
       const data = await res.json()
-      console.log('✅ แก้ไขข้อมูลสินค้าแล้ว:', data)
+      if(res.status ===  1){
+        console.log('✅ แก้ไขข้อมูลสินค้าแล้ว:')
+      }else if (res.status ===  0){
+        console.error('❌ แก้ไขข้อมูลสินค้าไม่สำเร็จ:')
+      }
+      
       onClose()
     } catch (err) {
       console.error('❌ แก้ไขข้อมูลสินค้าไม่สำเร็จ:', err)
@@ -84,11 +102,11 @@ export default function UpdateProductModal({ show, onClose, Category }: UpdatePr
             placeholder="ราคา (บาท)"
             className="w-full border-b-3 border-amber-900 p-2 rounded"
             value={p_Price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => setPrice(Number(e.target.value))}
           />
           <select className='w-full mt-2 rounded-lg p-1.5 bg-gray-200' name="" value={c_ID} id="" onChange={(e) => (setCategory(Number(e.target.value)))}>
             <option value={Number("0")}> เลือกหมวดหมู่ </option>
-            {Category.map((item, index) => (
+            {propsCategory.map((item, index) => (
 
               <option key={index} value={item.c_ID}>
                 {item.c_Name}
