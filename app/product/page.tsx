@@ -1,8 +1,8 @@
 'use client'
 import Product from '../components/product'
 import AddProduct from '../components/product_add'
-import { useEffect, useState } from 'react'
-
+import { useEffect, useRef,useState } from 'react'
+import { io, Socket } from 'socket.io-client'
     type ProductType = {
         p_ID: number,
         p_Name: string,
@@ -22,19 +22,34 @@ export default function page() {
     const [showproduct_add, setShowproduct_add] = useState(false)
     const [categoryData , setCategory] = useState<CategoryType[]>([])
     const [productData, setProduct] = useState<ProductType[]>([])
-    useEffect (()=>{
-        const fetchProduct = async () => {
+    const socketRef = useRef<Socket | null>(null)
+    const fetchProduct = async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/`)
             const resData = await res.json()
             setProduct(resData.data)
         }
+    useEffect (()=>{
+        if(!socketRef.current){
+            socketRef.current = io(`${process.env.NEXT_PUBLIC_SOCKET_URL}`)
+            socketRef.current.on('connect', () => {
+                console.log('🟢 Socket connected:', socketRef.current?.id)
+            })
+            socketRef.current.on(`refreshProduct`,()=>{
+            fetchProduct()
+        })
+        }
+       
         const fetchCategory = async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categorys/`)
             const resData = await res.json()
             setCategory(resData.data)
         }
-        fetchCategory()
         fetchProduct()
+        fetchCategory()
+        return ()=>{
+             socketRef.current?.disconnect()
+                socketRef.current = null
+        }
     },[])
     return (
         <div>
