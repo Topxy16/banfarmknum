@@ -55,63 +55,68 @@ export default function AddProductModal({ show, onClose, category }: AddProductM
     }
   }
   return (
+
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
-      <div className="bg-white rounded-xl shadow-xl w-90 max-w-md p-6">
-        <h2 className="text-2xl font-bold text-center mb-4">เพิ่มสินค้า</h2>
-        <div className="space-y-3">
-          <input
-            type="text"
-            placeholder="ชื่อสินค้า"
-            className="w-full border-b-3 border-amber-900 p-2 rounded"
-            value={p_Name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <textarea
-            placeholder="รายละเอียด"
-            className="w-full border-b-3 border-amber-900 p-2 rounded"
-            value={p_Detail}
-            onChange={(e) => setDetail(e.target.value)}
-          />
-          <input
-            type="number"
-            placeholder="ราคา (บาท)"
-            className="w-full border-b-3 border-amber-900 p-2 rounded"
-            value={p_Price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-          <select className='w-full mt-2 rounded-lg p-1.5 bg-gray-200' name="" value={c_ID} id="" onChange={(e) => (setCategory(Number(e.target.value)))}>
-            <option value={Number("0")}> เลือกหมวดหมู่ </option>
-            {category.map((item, index) => (
+      <div className='bg-green-900 rounded-xl'>
+        <div className="text-3xl font-bold text-white p-4">เพิ่มสินค้า</div>
+        <div className="bg-white shadow-xl w-90 max-w-md p-6">
+          <div className="space-y-3">
+            <input
+              type="text"
+              placeholder="ชื่อสินค้า"
+              className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
+              value={p_Name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <textarea
+              placeholder="รายละเอียด"
+              className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
+              value={p_Detail}
+              onChange={(e) => setDetail(e.target.value)}
+            />
+            <select className='w-full rounded-lg p-1.5 bg-gray-200 hover:bg-gray-300' name="" value={c_ID} id="" onChange={(e) => (setCategory(Number(e.target.value)))}>
+              <option value={Number("0")}> เลือกหมวดหมู่ </option>
+              {category.map((item, index) => (
 
-              <option key={index} value={item.c_ID}>
-                {item.c_Name}
-              </option>
-            ))}
-          </select>
+                <option key={index} value={item.c_ID}>
+                  {item.c_Name}
+                </option>
+              ))}
+            </select>
+            <input
+              type="number"
+              placeholder="ราคา (บาท)"
+              className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
+              value={p_Price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
 
-          {/* <div className='mt-1'>อัปโหลดรูปภาพ</div>
+
+            {/* <div className='mt-1'>อัปโหลดรูปภาพ</div>
           <input type="file" accept="image/*" onChange={handleImage} className="w-50 bg-gray-200 p-1.5 rounded-lg" />
 
 
           {preview && (
             <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded" />
           )} */}
-          <div className="flex justify-end gap-2 pt-4">
-            <button
-              onClick={onClose}
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded"
-            >
-              ยกเลิก
-            </button>
-            <button
-              onClick={handleSubmit}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            >
-              เพิ่มสินค้า
-            </button>
+            <div className="flex justify-end gap-2 pt-4">
+              <button
+                onClick={onClose}
+                className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="bg-green-900 text-white px-4 py-2 rounded-xl hover:bg-green-700"
+              >
+                เพิ่มสินค้า
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   )
 }

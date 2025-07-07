@@ -1,5 +1,5 @@
 'use client'
-import UpdataProduct from '../components/product_update'
+import UpdateProduct from '../components/product_update'
 import DeleteProduct from '../components/product_delete'
 import neyor from '../../public/neyor.png'
 import Image from 'next/image'
@@ -80,7 +80,7 @@ export default function Product({ product, propsCategory }: propsProduct) {
                     ))}
                 </div>{showproduct_update && productUpdate && (
                     <div>
-                        <UpdataProduct
+                        <UpdateProduct
                             productUpdate={productUpdate}
                             propsCategory={propsCategory}
                             show={showproduct_update}

@@ -1,48 +1,59 @@
 'use client'
 import { useState } from "react"
 import AddOrder from '../components/order_add'
-import OrderDetaill from '../components/order_detail'
-import OrderUpadate from '../components/order_update'
+import DetaillOrder from '../components/order_detail'
+import UpdateOrder from '../components/order_update'
+import DeleteOrder from '../components/order_delete'
 
 type OrderType = {
     o_ID: number,
-    u_ID: number,
-    o_total: number,
+    u_userName: string,
+    de_tel: number,
     o_date: string,
     o_endDate: string,
     o_image: string,
     o_status: number,
-}
-type OrderItemType = {
-    oi_ID: number,
-    o_ID: number,
-    p_ID: number,
-    oi_amount: number,
-    oi_price: number,
+    i_Price: number,
+    p_Name: string,
+    p_Detail: string
+    latitude: string,
+    longitude: string
 }
 
 export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_add, setShoworder_add] = useState(false)
     const [showorder_detail, setShoworder_detail] = useState(false)
     const [showorder_update, setShoworder_update] = useState(false)
+    const [showorder_dalete, setShoworder_dalete] = useState(false)
+
+    const handleDelete = () => {
+        setShoworder_dalete(false)
+    }
     return (
         <div>
             <AddOrder show={showorder_add} onClose={() => setShoworder_add(false)} />
-            <OrderDetaill show={showorder_detail} onClose={() => setShoworder_detail(false)} />
-            <OrderUpadate show={showorder_update} onClose={() => setShoworder_update(false)} />
+            <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
+            <UpdateOrder show={showorder_update} onClose={() => setShoworder_update(false)} />
 
             <div className="phone md:hidden">
-                <button className="w-full bg-green-400 rounded-2xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
+                <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
                     <div>เพิ่มออเดอร์</div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                 </button>
-                <div className="bg-white rounded-xl text-black text-xl mt-2 p-4 shadow-xl" onClick={()=>{setShoworder_detail(true)}}>
-                    <div className="flex gap-3 text-xl pb-1">
-                        <div className="bg-zinc-600 text-black font-semibold px-1 rounded-lg">#0001</div>
-                        <div className="bg-zinc-600 text-black px-1 rounded-lg">ชื่อคนสั่ง</div>
-                        <div className="bg-green-200 text-green-900 px-1 rounded-lg">สถานะ : จัดส่งแล้ว</div>
+                <div className="bg-white rounded-xl text-black text-xl mt-2 p-4 shadow-xl">
+                    <div className="flex gap-3 text-lg mb-4">
+                        <div className="bg-zinc-600 text-black font-semibold p-1 rounded-lg">#0001</div>
+                        <div className="bg-zinc-600 text-black p-1 rounded-lg">ชื่อคนสั่ง</div>
+                        <div className="bg-green-200 text-green-900 p-1 rounded-lg">สถานะ : จัดส่งแล้ว</div>
+                        <div className="ml-2.5">
+                            <button onClick={() => setShoworder_detail(true)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 rounded-4xl hover:bg-gray-300">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div className="flex place-content-between mt-2 items-center">
                         <div className="bg-amber-600 rounded-lg px-1 text-white">ต้องส่ง : 02/07/2025</div>
@@ -58,7 +69,7 @@ export default function Order({ order }: { order: OrderType[] }) {
                                 </svg>
                             </div>
                             <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6" onClick={() => { setShoworder_update(true) }}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                 </svg>
                             </div>
@@ -113,7 +124,10 @@ export default function Order({ order }: { order: OrderType[] }) {
                                         {item.o_date}
                                     </td>
                                     <td className="px-6 py-4">
-
+                                        {item.u_userName}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {item.de_tel}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.o_endDate}
@@ -166,7 +180,7 @@ export default function Order({ order }: { order: OrderType[] }) {
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
                                         </div>
-                                        <div className="bg-red-900 hover:bg-red-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                        <div className="bg-red-900 hover:bg-red-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" onClick={() => setShoworder_dalete(true)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
@@ -190,6 +204,18 @@ export default function Order({ order }: { order: OrderType[] }) {
 
                 </div>
             </div>
+            <DeleteOrder
+                show={showorder_dalete}
+                title="ลบออเดอร์"
+                message="คุณแน่ใจหรือไม่ว่าต้องการลบออเดอร์นี้?"
+                confirmText="ลบ"
+                secondaryText="ยกเลิก"
+                onConfirm={() => {
+                    handleDelete()
+                    setShoworder_dalete(false)
+                }}
+                onSecondary={() => setShoworder_dalete(false)}
+            />
         </div>
     )
 }

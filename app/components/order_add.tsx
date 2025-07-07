@@ -66,94 +66,95 @@ export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
-      <div className="bg-white rounded-xl shadow-xl w-90 p-6 md:w-120">
-        <h2 className="text-2xl font-bold text-center mb-4">เพิ่มออเดอร์</h2>
-        <div className="">
-
-          <div className='text-xl'>วันที่ต้องส่ง</div>
-          <input
-            type="date"
-            className="w-full border-b-3 border-amber-900 p-2 rounded"
-            onChange={(e) => setO_endDate(e.target.value)}
-          />
-
-          <div className='text-xl mt-4'>ข้อมูลผู้สั่ง</div>
-          <div className='flex gap-2'>
+      <div className='bg-green-900 rounded-xl'>
+         <div className="text-3xl font-bold text-white p-4">เพิ่มออเดอร์</div>
+        <div className="bg-white shadow-xl w-90 p-6 md:w-120">
+          <div className="space-y-3">
+            <div className='text-sm'>วันที่ต้องส่ง</div>
             <input
-              type="text"
-              className='flex-1 p-1 border-b-3 border-amber-900 rounded'
-              placeholder='ชื่อ'
-              onChange={(e) => setU_username(e.target.value)}
+              type="date"
+              className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
+              onChange={(e) => setO_endDate(e.target.value)}
             />
-            <input
-              type="text"
-              className='flex-1 p-1 border-b-3 border-amber-900 rounded'
-              placeholder='เบอร์โทรศัพท์'
-              onChange={(e) => setDe_tel(e.target.value)}
-            />
-          </div>
+
+            <div className='text-sm'>ข้อมูลผู้สั่ง</div>
+            <div className='flex gap-2'>
+              <input
+                type="text"
+                className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
+                placeholder='ชื่อ'
+                onChange={(e) => setU_username(e.target.value)}
+              />
+              <input
+                type="text"
+                className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
+                placeholder='เบอร์โทรศัพท์'
+                onChange={(e) => setDe_tel(e.target.value)}
+              />
+            </div>
 
 
-          <div className=''>
-            <div className='text-xl mt-4'>สินค้า</div>
-            <div className='items-center grid grid-cols-2 gap-2 md:flex'>
-              <div>🧈 เนยน้ำตาล</div>
-              <div className='gap-2 flex'>
-                <button onClick={() => setButterQty(b => Math.max(0, b - 1))}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-600 rounded-2xl">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                </button>
-                <span>{butterQty}</span>
-                <button onClick={() => setButterQty(b => b + 1)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-600 rounded-2xl">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                </button>
-              </div>
-              <div className=''>🐷 พริกเผาหมูหยอง</div>
-              <div className='gap-2 flex'>
-                <button onClick={() => setPorkQty(p => Math.max(0, p - 1))}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-600 rounded-2xl">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                </button>
-                <span>{porkQty}</span>
-                <button onClick={() => setPorkQty(p => p + 1)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-600 rounded-2xl">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                </button>
+            <div className=''>
+              <div className='text-sm'>สินค้า</div>
+              <div className='items-center grid grid-cols-2 gap-2'>
+                <div className='md:text-xl'>🧈 เนยน้ำตาล</div>
+                <div className='gap-2 flex'>
+                  <button onClick={() => setButterQty(b => Math.max(0, b - 1))}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-600 rounded-2xl">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                  <span>{butterQty}</span>
+                  <button onClick={() => setButterQty(b => b + 1)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-600 rounded-2xl">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                </div>
+                <div className='md:text-xl'>🐷 พริกเผาหมูหยอง</div>
+                <div className='gap-2 flex'>
+                  <button onClick={() => setPorkQty(p => Math.max(0, p - 1))}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-600 rounded-2xl">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                  <span>{porkQty}</span>
+                  <button onClick={() => setPorkQty(p => p + 1)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-600 rounded-2xl">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className='flex gap-2 py-1 mt-2 items-center justify-center bg-amber-400 hover:bg-amber-600 text-white rounded-xl'>
-            <div>เพิ่มที่อยู่การจัดส่ง</div>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 ">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-            </svg>
-          </div>
+            <div className='flex gap-2 py-1 mt-2 items-center justify-center bg-yellow-900 hover:bg-yellow-700 text-white rounded-xl'>
+              <div>เพิ่มที่อยู่การจัดส่ง</div>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 ">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+              </svg>
+            </div>
 
-          <div className='text-2xl flex place-content-between p-2 mt-4 rounded-xl bg-green-300 text-white font-bold'>
-            <div>รวม</div>
-            <div>{totalPrice}</div>
-          </div>
+            <div className='text-2xl flex place-content-between p-2 mt-4 rounded-xl bg-green-900 text-white font-bold'>
+              <div>รวม</div>
+              <div>{totalPrice}</div>
+            </div>
 
-          <div className="flex justify-end gap-2 pt-4">
-            <button
-              onClick={onClose}
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded"
-            >
-              ยกเลิก
-            </button>
-            <button
-              onClick={handleSubmit}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            >
-              เพิ่มออเดอร์
-            </button>
+            <div className="flex justify-end gap-2 pt-4">
+              <button
+                onClick={onClose}
+                className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="bg-green-900 text-white px-4 py-2 rounded-xl hover:bg-green-700"
+              >
+                เพิ่มออเดอร์
+              </button>
+            </div>
           </div>
         </div>
       </div>
