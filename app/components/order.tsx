@@ -2,6 +2,7 @@
 import { useState } from "react"
 import AddOrder from '../components/order_add'
 import OrderDetaill from '../components/order_detail'
+import OrderUpadate from '../components/order_update'
 
 type OrderType = {
     o_ID: number,
@@ -23,10 +24,12 @@ type OrderItemType = {
 export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_add, setShoworder_add] = useState(false)
     const [showorder_detail, setShoworder_detail] = useState(false)
+    const [showorder_update, setShoworder_update] = useState(false)
     return (
         <div>
             <AddOrder show={showorder_add} onClose={() => setShoworder_add(false)} />
             <OrderDetaill show={showorder_detail} onClose={() => setShoworder_detail(false)} />
+            <OrderUpadate show={showorder_update} onClose={() => setShoworder_update(false)} />
 
             <div className="phone md:hidden">
                 <button className="w-full bg-green-400 rounded-2xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
@@ -158,17 +161,17 @@ export default function Order({ order }: { order: OrderType[] }) {
                                 </td>
                                 <td className="px-6 py-4 flex place-content-between">
                                     <div className="flex">
-                                        <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                        <div className="bg-green-900 hover:bg-green-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
                                         </div>
-                                        <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                        <div className="bg-red-900 hover:bg-red-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
                                         </div>
-                                        <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                        <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" onClick={() => setShoworder_update(true)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
