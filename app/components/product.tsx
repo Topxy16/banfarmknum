@@ -31,9 +31,31 @@ export default function Product({ product, propsCategory }: propsProduct) {
     const [showproduct_update, setShowProduct_update] = useState<boolean>(false)
     const [showproduct_dalete, setShowProduct_delete] = useState<boolean>(false)
     const [productUpdate, setProductUpdate] = useState<ProductType>()
+    const [p_ID, setProductID] = useState<number>(0)
 
-    const handleDelete = () => {
-        setShowProduct_delete(false)
+    const handleDelete = async (ID: number) => {
+        const token = localStorage.getItem('token')
+        console.log(`ลบสินค้าแล้ว ${ID}`)
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/deleteProduct/` + ID, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+            })
+            const resData = await res.json()
+            if (resData.status === 1) {
+                console.log('Delete Product Successfully')
+            } else if (resData.status === 0) {
+                console.log('Delete Product Unsuccessfully')
+            }
+            setShowProduct_delete(false)
+        } catch (error) {
+            console.log(error)
+            console.log('Delete Product Unsuccessfully')
+            setShowProduct_delete(false)
+        }
     }
 
     return (
@@ -79,14 +101,14 @@ export default function Product({ product, propsCategory }: propsProduct) {
 
                     ))}
                 </div>{showproduct_update && productUpdate && (
-                    <div>
+                    <div >
                         <UpdateProduct
                             productUpdate={productUpdate}
                             propsCategory={propsCategory}
                             show={showproduct_update}
                             onClose={() => setShowProduct_update(false)} />
-                    </div>
 
+                    </div>
                 )}
                 <DeleteProduct
                     show={showproduct_dalete}
@@ -95,7 +117,8 @@ export default function Product({ product, propsCategory }: propsProduct) {
                     confirmText="ลบ"
                     secondaryText="ยกเลิก"
                     onConfirm={() => {
-                        handleDelete()
+                        // เรียก API ลบสินค้า
+                        handleDelete(p_ID)
                         setShowProduct_delete(false)
                     }}
                     onSecondary={() => setShowProduct_delete(false)}
