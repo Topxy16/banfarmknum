@@ -3,8 +3,6 @@ import UpdataProduct from '../components/product_update'
 import DeleteProduct from '../components/product_delete'
 import neyor from '../../public/neyor.png'
 import Image from 'next/image'
-
-
 import { useState } from 'react'
 import { useFormState } from 'react-dom'
 type propsProduct = {
