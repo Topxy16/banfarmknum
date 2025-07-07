@@ -65,10 +65,10 @@ export default function UpdateProductModal({ show, propsCategory, productUpdate,
           'c_ID': c_ID
         }),
       })
-      const data = await res.json()
-      if (data.status === 1) {
+      const resData = await res.json()
+      if (resData.status === 1) {
         console.log('✅ แก้ไขข้อมูลสินค้าแล้ว:')
-      } else if (res.status === 0) {
+      } else if (resData.status === 0) {
         console.error('❌ แก้ไขข้อมูลสินค้าไม่สำเร็จ:')
       }
       onClose()

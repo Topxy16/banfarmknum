@@ -88,21 +88,14 @@ export default function AddProductModal({ show, onClose, category }: AddProductM
               </option>
             ))}
           </select>
-          <input
-            type="number"
-            placeholder="จำนวน"
-            className="w-full border-b-3 border-amber-900 p-2 rounded"
-            value={p_Amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
 
-          <div className='mt-1'>อัปโหลดรูปภาพ</div>
+          {/* <div className='mt-1'>อัปโหลดรูปภาพ</div>
           <input type="file" accept="image/*" onChange={handleImage} className="w-50 bg-gray-200 p-1.5 rounded-lg" />
 
 
           {preview && (
             <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded" />
-          )}
+          )} */}
           <div className="flex justify-end gap-2 pt-4">
             <button
               onClick={onClose}

@@ -85,7 +85,6 @@ export default function Product({ product, propsCategory }: propsProduct) {
                             propsCategory={propsCategory}
                             show={showproduct_update}
                             onClose={() => setShowProduct_update(false)} />
-
                     </div>
 
                 )}
