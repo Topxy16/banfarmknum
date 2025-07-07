@@ -77,14 +77,22 @@ export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
             onChange={(e) => setO_endDate(e.target.value)}
           />
 
-          <div>
-            <div className='text-xl mt-4'>ข้อมูลผู้สั่ง</div>
-            <div className='flex gap-2 items-center'>
-              <input type="text" className='w-35 p-1 border-b-3 border-amber-900 rounded' placeholder='ชื่อ' onChange={(e) => setU_username(e.target.value)} />
-              <input type="text" className='w-35 p-1 border-b-3 border-amber-900 rounded' placeholder='เบอร์โทรศัพท์' onChange={(e) => setDe_tel(e.target.value)} />
-
-            </div>
+          <div className='text-xl mt-4'>ข้อมูลผู้สั่ง</div>
+          <div className='flex gap-2'>
+            <input
+              type="text"
+              className='flex-1 p-1 border-b-3 border-amber-900 rounded'
+              placeholder='ชื่อ'
+              onChange={(e) => setU_username(e.target.value)}
+            />
+            <input
+              type="text"
+              className='flex-1 p-1 border-b-3 border-amber-900 rounded'
+              placeholder='เบอร์โทรศัพท์'
+              onChange={(e) => setDe_tel(e.target.value)}
+            />
           </div>
+
 
           <div className=''>
             <div className='text-xl mt-4'>สินค้า</div>
