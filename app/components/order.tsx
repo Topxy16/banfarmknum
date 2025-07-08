@@ -45,8 +45,7 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_dalete, setShoworder_dalete] = useState(false)
     const [o_ID, seto_ID] = useState<number>(0)
     const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
-    const [userData, setUserData] = useState<userType[]>([])
-    const [orderdateEnd, setorderdateEnd] = useState<dateEnd[]>([])
+    const [orderdateEnd, setorderdateEnd] = useState<dateEnd>()
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleString('th-TH');
     };
