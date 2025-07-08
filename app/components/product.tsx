@@ -32,7 +32,6 @@ export default function Product({ product, propsCategory }: propsProduct) {
     const [showproduct_dalete, setShowProduct_delete] = useState<boolean>(false)
     const [productUpdate, setProductUpdate] = useState<ProductType>()
     const [p_ID, setProductID] = useState<number>(0)
-
     const handleDelete = async (ID: number) => {
         const token = localStorage.getItem('token')
         console.log(`ลบสินค้าแล้ว ${ID}`)
