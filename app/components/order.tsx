@@ -25,11 +25,16 @@ type OrderItemType = {
     i_ID: number
     i_Amount: number,
     p_ID: number,
-    p_Name : string
+    p_Name: string
 }
 
 type dateEnd = {
     o_dateEnd: string
+}
+
+type userType = {
+    u_ID: number,
+    u_userName: string
 }
 
 export default function Order({ order }: { order: OrderType[] }) {
@@ -37,13 +42,14 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_detail, setShoworder_detail] = useState(false)
     const [showorder_update, setShoworder_update] = useState(false)
     const [showorder_dalete, setShoworder_dalete] = useState(false)
-    const [o_ID , seto_ID] = useState<number>(0)
+    const [o_ID, seto_ID] = useState<number>(0)
     const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
     const [orderdateEnd, setorderdateEnd] = useState<dateEnd>()
+    const [userData, setUserData] = useState<userType[]>([])
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleString('th-TH');
     };
-     const handleDelete = async (id: number) => {
+    const handleDelete = async (id: number) => {
         const token = localStorage.getItem('token')
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/deleteOrder/` + id, {
@@ -59,67 +65,79 @@ export default function Order({ order }: { order: OrderType[] }) {
             } else if (resData.status === 0) {
                 console.log('Delete Order Unsuccessfully')
             }
-             setShoworder_dalete(false)
+            setShoworder_dalete(false)
         } catch (error) {
             console.log(error)
             console.log('Delete Product Unsuccessfully')
             setShoworder_dalete(false)
         }
     }
-    const updateStatus = async (id:number)=>{
+    const updateStatus = async (id: number) => {
         const token = localStorage.getItem('token')
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/updateStatusOrder`,{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/updateStatusOrder`, {
             method: 'PATCH',
             headers: {
-            Authorization: `Bearer ${token}`,
-            'content-type': 'application/json'
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
             },
-             body: JSON.stringify({ o_ID: id })
+            body: JSON.stringify({ o_ID: id })
         })
         const resData = await res.json()
-        if( resData.status === 1){
-            console.log(`   เปลี่ยนสถานะได้`) 
-        }else if (resData.status === 0) {   
+        if (resData.status === 1) {
+            console.log(`   เปลี่ยนสถานะได้`)
+        } else if (resData.status === 0) {
             console.log(`ไม่สามารถเปลี่ยนสถานะได้`)
         }
     }
-    const fetchendDate = async (id:number)=> {
-         const token = localStorage.getItem('token')
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/getdateEnd/`+id,{
-             headers: {
-                    Authorization: `Bearer ${token}`,
-                    'content-type': 'application/json'  
-                },
+    const fetchendDate = async (id: number) => {
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/getdateEnd/` + id, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
         })
         const resData = await res.json()
-        if (resData.status === 0){
+        if (resData.status === 0) {
             console.log(`ไม่สามารถดึงข้อมูลวันที่ส่งในออเดอร์ หมายเลข  ${id}`)
         }
         setorderdateEnd(resData.data)
     }
-    
-    const fetchOrdersItem = async (id:number)=>{
+
+    const fetchUser = async () => {
         const token = localStorage.getItem('token')
-        const res = await fetch (`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/ordersitems/`+id,{
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'content-type': 'application/json'  
-                },
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/allUser`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
         })
         const resData = await res.json()
-        if (resData.status === 0){
+        setUserData(resData.data)
+    }
+
+    const fetchOrdersItem = async (id: number) => {
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/ordersitems/` + id, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
+        })
+        const resData = await res.json()
+        if (resData.status === 0) {
             console.log(`ไม่สามารถดึงข้อมูลสินค้าในออเดอร์ หมายเลข  ${id}`)
         }
         setOrderItem(resData.data)
-    }    
+    }
     return (
         <div>
-            <AddOrder show={showorder_add} onClose={() => setShoworder_add(false)} />
+            <AddOrder show={showorder_add} userData={userData} onClose={() => setShoworder_add(false)} />
             <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
             <UpdateOrder show={showorder_update} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_update(false)} />
 
             <div className="phone md:hidden">
-                <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
+                <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { fetchUser(), setShoworder_add(true) }}>
                     <div className="">เพิ่มออเดอร์</div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -186,7 +204,7 @@ export default function Order({ order }: { order: OrderType[] }) {
                                 </th>
                                 <th scope="col" className="px-6 py-3 flex place-content-between text-center">
                                     <div className="mt-1.5">เครื่องมือ</div>
-                                    <button onClick={() => setShoworder_add(true)} className='bg-green-900 hover:bg-green-700 rounded-xl p-1 text-white flex items-center'>
+                                    <button className='bg-green-900 hover:bg-green-700 rounded-xl p-1 text-white flex items-center' onClick={() => { fetchUser(), setShoworder_add(true) }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                         </svg>
@@ -214,39 +232,39 @@ export default function Order({ order }: { order: OrderType[] }) {
                                         {formatDate(item.o_date)}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {item.o_Status  === 0 ? <div>กำลังรอจัดส่ง</div> :
-                                        item.o_Status  === 1 ? <div>ส่งสำเร็จแล้ว</div> : null
+                                        {item.o_Status === 0 ? <div>กำลังรอจัดส่ง</div> :
+                                            item.o_Status === 1 ? <div>ส่งสำเร็จแล้ว</div> : null
                                         }
                                     </td>
                                     <td className="px-6 py-4 flex flex place-content-between">
                                         <div className="flex">
-                                        <div className="bg-green-900 hover:bg-green-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                            <button onClick={() => {updateStatus(item.o_ID)}}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}   stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                            </svg>
-                                            </button>
+                                            <div className="bg-green-900 hover:bg-green-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                                <button onClick={() => { updateStatus(item.o_ID) }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div className="bg-red-900 hover:bg-red-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                                <button onClick={() => { seto_ID(item.o_ID), setShoworder_dalete(true) }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" >
+                                                <button onClick={() => { setShoworder_update(true), fetchOrdersItem(item.o_ID), fetchendDate(item.o_ID) }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="bg-red-900 hover:bg-red-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                            <button  onClick={() => {seto_ID(item.o_ID), setShoworder_dalete(true)}}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        <button className="mt-4 mr-1" onClick={() => setShoworder_detail(true)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 rounded-4xl hover:bg-gray-300">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
-                                            </button>
-                                        </div>
-                                        <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" >
-                                            <button onClick={() => {setShoworder_update(true),fetchOrdersItem(item.o_ID),fetchendDate(item.o_ID)}}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                            </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <button className="mt-4 mr-1" onClick={() => setShoworder_detail(true)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 rounded-4xl hover:bg-gray-300">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </button>
+                                        </button>
                                     </td>
                                 </tr>
                             ))}

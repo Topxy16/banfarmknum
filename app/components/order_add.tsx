@@ -5,24 +5,17 @@ import React, { useState } from 'react'
 type AddOrderModalProps = {
   show: boolean
   onClose: () => void
+  userData: userType[]
 }
 
-export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
-  const [u_userName, setU_username] = useState('')
-  const [de_tel, setDe_tel] = useState('')
-  const [o_Status, setO_status] = useState('')
-  const [o_image, setO_image] = useState<File | null>(null)
+type userType = {
+  u_ID: number,
+  u_userName: string
+}
+export default function AddOrderModal({ show, onClose, userData }: AddOrderModalProps) {
+  const [user, setUser] = useState(0)
   const [i_Amount, setI_amount] = useState('')
-  const [i_Price, setI_price] = useState(100)
-  const [p_Name, setP_name] = useState('')
-  const [p_Detail, setP_detail] = useState('')
-  const [p_Img, setP_img] = useState<File | null>(null)
-  const [o_date, setO_date] = useState('')
   const [o_endDate, setO_endDate] = useState('')
-  const [latitude, setLatitude] = useState('')
-  const [longtitude, setLongtitude] = useState('')
-  const [o_preview, setO_preview] = useState<string | null>(null)
-  const [p_preview, setP_preview] = useState<string | null>(null)
   const [butterQty, setButterQty] = useState(0)
   const [porkQty, setPorkQty] = useState(0)
 
@@ -33,29 +26,31 @@ export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
+
+    const cart = []
+
+    if (butterQty > 0) {
+      cart.push({ p_ID: 13, p_Amount: butterQty })
+    }
+
+    if (porkQty > 0) {
+      cart.push({ p_ID: 14, p_Amount: porkQty })
+    }
+
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order/addOrders`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/addOrder`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'content-type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          'u_userName': u_userName,
-          'de_tel': de_tel,
-          'p_Name': butterQty > 0 && porkQty > 0
-            ? 'เนยน้ำตาล, พริกเผาหมูหยอง'
-            : butterQty > 0
-              ? 'เนยน้ำตาล'
-              : porkQty > 0
-                ? 'พริกเผาหมูหยอง'
-                : '',
-          'p_Detail': p_Detail,
-          'i_Amount': i_Amount,
-          'i_Price': i_Price,
-          'o_endDate': o_endDate,
+          u_ID: user,
+          o_endDate: new Date(o_endDate).toISOString(), // แปลงให้เป็น ISO format
+          cart: cart,
         }),
       })
+
       const data = await res.json()
       console.log('✅ เพิ่มออเดอร์แล้ว:', data)
       onClose()
@@ -64,10 +59,11 @@ export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
     }
   }
 
+
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
       <div className='bg-green-900 rounded-xl'>
-         <div className="text-3xl font-bold text-white p-4">เพิ่มออเดอร์</div>
+        <div className="text-3xl font-bold text-white p-4">เพิ่มออเดอร์</div>
         <div className="bg-white shadow-xl w-90 p-6 md:w-120">
           <div className="space-y-3">
             <div className='text-sm'>วันที่ต้องส่ง</div>
@@ -79,18 +75,13 @@ export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
 
             <div className='text-sm'>ข้อมูลผู้สั่ง</div>
             <div className='flex gap-2'>
-              <input
-                type="text"
-                className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
-                placeholder='ชื่อ'
-                onChange={(e) => setU_username(e.target.value)}
-              />
-              <input
-                type="text"
-                className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
-                placeholder='เบอร์โทรศัพท์'
-                onChange={(e) => setDe_tel(e.target.value)}
-              />
+              <select className='w-full rounded-lg p-1.5 bg-gray-200 hover:bg-gray-300' onChange={(e) => (setUser(Number(e.target.value)))}>
+                {userData.map((item, index) => (
+                  <option key={index} value={item.u_ID}>
+                    {item.u_userName}
+                  </option>
+                ))}
+              </select>
             </div>
 
 
@@ -127,15 +118,6 @@ export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
                 </div>
               </div>
             </div>
-
-            <div className='flex gap-2 py-1 mt-2 items-center justify-center bg-yellow-900 hover:bg-yellow-700 text-white rounded-xl'>
-              <div>เพิ่มที่อยู่การจัดส่ง</div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 ">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-              </svg>
-            </div>
-
             <div className='text-2xl flex place-content-between p-2 mt-4 rounded-xl bg-green-900 text-white font-bold'>
               <div>รวม</div>
               <div>{totalPrice}</div>
