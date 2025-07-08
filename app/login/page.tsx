@@ -1,32 +1,24 @@
-'use client'
+"use client"
 import Image from 'next/image'
 import loginimg from '../../public/login.png'
-import React, { useState } from 'react'
 import Link from 'next/link'
+import React, { useState } from 'react'
 export default function Page() {
     const [username, setName] = useState("")
     const [password, setPass] = useState("")
+
     const login = async () => {
-        console.log("user = " + username)
-        console.log("pass = " + password)
-        const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/auth/login', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ 'username': username, 'password': password }),
         })
         const resData = await res.json()
-        console.log(resData)
+        if (resData.status === 1) {
+            localStorage.setItem('token', resData.token)
+            location.href = '/dashboard'
 
-        localStorage.setItem("token", resData.token)
-
-    }
-    const logincheck = async () => {
-        const token = localStorage.getItem('token');
-        const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/products/', {
-            headers: { authorization: `Bearer ${token}` }
-        })
-        const resData = await res.json()
-        console.log(resData)
+        }
     }
     return (
         <div>
@@ -61,7 +53,7 @@ export default function Page() {
                             <Link href="#">ลืมรหัสผ่าน</Link>
                             <Link href="/register">หากยังไม่มีบัญชี</Link>
                         </div>
-                        <button className='bg-zinc-100 text-white rounded-lg mt-10 p-2 w-full text-xl' onClick={login}>เข้าสู่ระบบ</button>
+                        <button className='bg-zinc-100 hover:bg-amber-900 text-white rounded-lg mt-10 p-2 w-full text-xl' onClick={login}>เข้าสู่ระบบ</button>
 
                     </div>
                 </div>

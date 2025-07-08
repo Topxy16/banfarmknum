@@ -1,49 +1,20 @@
-'use client'
+"use client"
+
 import Chart from '../components/chart'
-import Calender from '../components/calender'
 import Piechart from '../components/piechart'
 import SavingGoal from "../components/goal"
-import Alert from "../components/alerttoken"
+
 import Image from 'next/image'
 import bank from '../../public/bank.jpg'
 import cardwallat from '../../public/08.png'
 import cardtool from '../../public/09.png'
 
-import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
-
-export default function Page() {
-    const [showModal, setShowModal] = useState(false)
-
-    const router = useRouter();
-    useEffect(() => {
-        const fetchData = async () => {
-            const token = localStorage.getItem('token');
-            try {
-                const res = await fetch('https://3f7e-1-20-61-190.ngrok-free.app/api/products/', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    }
-                })
-                const checktoken = await res.json();
-
-                if (checktoken.message == "Unauthorized ! Token expire") {
-                    console.log('ไฟ')
-                    setShowModal(true)
-                }
-            } catch (error) {
-                console.error('Fetch failed:', error);
-            }
-        }
-        fetchData()
-    }, [router]);
-
+export default function page() {
+    
     return (
         <div className='px-15'>
             <div className="p-4">
-                <Alert message='💰 Token exp' detail='ก๋ายไก่ๆ' show={showModal} onClose={() => setShowModal(false)} />              
+
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
