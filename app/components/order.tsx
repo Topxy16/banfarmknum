@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import AddOrder from '../components/order_add'
 import DetaillOrder from '../components/order_detail'
 import UpdateOrder from '../components/order_update'
@@ -12,12 +12,14 @@ type OrderType = {
     o_date: string,
     o_endDate: string,
     o_image: string,
-    o_status: number,
+    o_Status: number,
     i_Price: number,
     p_Name: string,
     p_Detail: string
     latitude: string,
     longitude: string
+    de_firstName: string,
+    de_lastName: string,
 }
 
 export default function Order({ order }: { order: OrderType[] }) {
@@ -25,19 +27,64 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_detail, setShoworder_detail] = useState(false)
     const [showorder_update, setShoworder_update] = useState(false)
     const [showorder_dalete, setShoworder_dalete] = useState(false)
-
-    const handleDelete = () => {
-        setShoworder_dalete(false)
+    const [o_ID , seto_ID] = useState<number>(0)
+    const formatDate = (dateStr: string) => {
+        return new Date(dateStr).toLocaleString('th-TH');
+    };
+    
+     const handleDelete = async (id: number) => {
+        const token = localStorage.getItem('token')
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/deleteOrder/` + id, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+            })
+            const resData = await res.json()
+            if (resData.status === 1) {
+                console.log('Delete Order Successfully')
+            } else if (resData.status === 0) {
+                console.log('Delete Order Unsuccessfully')
+            }
+             setShoworder_dalete(false)
+        } catch (error) {
+            console.log(error)
+            console.log('Delete Product Unsuccessfully')
+            setShoworder_dalete(false)
+        }
     }
+    
+    const updateStatus = async (id:number)=>{
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/updateStatusOrder`,{
+            method: 'PATCH',
+            headers: {
+            Authorization: `Bearer ${token}`,
+            'content-type': 'application/json'
+            },
+             body: JSON.stringify({ o_ID: id })
+        })
+        const resData = await res.json()
+        if( resData.status === 1){
+            console.log(`   เปลี่ยนสถานะได้`) 
+        }else if (resData.status === 0) {   
+            console.log(`ไม่สามารถเปลี่ยนสถานะได้`)
+        }
+    }
+    useEffect(() => {
+  console.log('Component mounted or updated')
+}, [])
     return (
         <div>
             <AddOrder show={showorder_add} onClose={() => setShoworder_add(false)} />
             <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
-            <UpdateOrder show={showorder_update} onClose={() => setShoworder_update(false)} />
+            <UpdateOrder show={showorder_update} o_ID={o_ID} onClose={() => setShoworder_update(false)} />
 
             <div className="phone md:hidden">
                 <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
-                    <div>เพิ่มออเดอร์</div>
+                    <div className="">เพิ่มออเดอร์</div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
@@ -110,9 +157,7 @@ export default function Order({ order }: { order: OrderType[] }) {
 
                                     </button>
                                 </th>
-
                             </tr>
-
                         </thead>
                         <tbody>
                             {order.map((item, index) => (
@@ -121,7 +166,7 @@ export default function Order({ order }: { order: OrderType[] }) {
                                         {item.o_ID}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {item.o_date}
+                                        {formatDate(item.o_date)}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.u_userName}
@@ -130,78 +175,40 @@ export default function Order({ order }: { order: OrderType[] }) {
                                         {item.de_tel}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {item.o_endDate}
+                                        {formatDate(item.o_date)}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {item.o_status}
+                                        {item.o_Status  === 0 ? <div>กำลังรอจัดส่ง</div> :
+                                        item.o_Status  === 1 ? <div>ส่งสำเร็จแล้ว</div> : null
+                                        }
                                     </td>
                                     <td className="px-6 py-4 flex">
-                                        <div className="bg-zinc-500 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                            </svg>
-                                        </div>
-                                        <div className="bg-red-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                            </svg>
-                                        </div>
-                                        <div className="bg-yellow-900 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                            </svg>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            <tr className="bg-white text-black">
-                                <th scope="row" className="px-6 py-4">
-                                    #3213421
-                                </th>
-                                <td className="px-6 py-4">
-                                    21/02/25
-                                </td>
-                                <td className="px-6 py-4">
-                                    พี่ชาวี
-                                </td>
-                                <td className="px-6 py-4">
-                                    0926166623
-                                </td>
-                                <td className="px-6 py-4">
-                                    21/03/25
-                                </td>
-                                <td className="px-6 py-4">
-                                    ส่งแล้ว
-                                </td>
-                                <td className="px-6 py-4 flex place-content-between">
-                                    <div className="flex">
+                                        <div className="flex">
                                         <div className="bg-green-900 hover:bg-green-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                            <button onClick={() => {updateStatus(item.o_ID)}}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}   stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
+                                            </button>
                                         </div>
-                                        <div className="bg-red-900 hover:bg-red-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" onClick={() => setShoworder_dalete(true)}>
+                                        <div className="bg-red-900 hover:bg-red-600 text-white rounded-lg ml-1 px-2 h-10 pt-2">
+                                            <button  onClick={() => {seto_ID(item.o_ID), setShoworder_dalete(true)}}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
+                                            </button>
                                         </div>
-                                        <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" onClick={() => setShoworder_update(true)}>
+                                        <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" onClick={() => {seto_ID(item.o_ID),setShoworder_update(true)}}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
                                         </div>
                                     </div>
-                                    <button className="mt-4 mr-1" onClick={() => setShoworder_detail(true)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 rounded-4xl hover:bg-gray-300">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
-
                 </div>
             </div>
             <DeleteOrder
@@ -211,7 +218,7 @@ export default function Order({ order }: { order: OrderType[] }) {
                 confirmText="ลบ"
                 secondaryText="ยกเลิก"
                 onConfirm={() => {
-                    handleDelete()
+                    handleDelete(o_ID)
                     setShoworder_dalete(false)
                 }}
                 onSecondary={() => setShoworder_dalete(false)}

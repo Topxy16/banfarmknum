@@ -4,12 +4,13 @@ import React, { useState } from 'react'
 type UpdateOrderModalProps = {
   show: boolean
   onClose: () => void
+  o_ID : number
 }
-export default function UpdateOrderModal({ show, onClose }: UpdateOrderModalProps) {
+export default function UpdateOrderModal({o_ID, show, onClose }: UpdateOrderModalProps) {
   if (!show) return null
   const [butterQty, setButterQty] = useState(0)
   const [porkQty, setPorkQty] = useState(0)
-
+  console.log(o_ID)
   // const handleSubmit = async () => {
   //   const token = localStorage.getItem('token')
   //   try {

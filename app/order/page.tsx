@@ -1,7 +1,7 @@
 'use client'
 import Order from '../components/order'
-import { useEffect, useState } from 'react'
-
+import { useEffect,useRef, useState } from 'react'
+import { io, Socket } from 'socket.io-client'
 type OrderType = {
     o_ID: number,
     u_ID: number,
@@ -9,7 +9,12 @@ type OrderType = {
     o_date: string,
     o_endDate: string,
     o_image: string,
-    o_status: number,
+    o_Status: number,
+    latitude: string,
+    longitude: string,
+    de_firstName: string,
+    de_lastName: string,
+    de_tel: string
 }
 type OrderItemType = {
     oi_ID: number,
@@ -22,20 +27,23 @@ type OrderItemType = {
 export default function Page() {
     const [orderData, setOder] = useState<OrderType[]>([])
     const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
-    useEffect(() => {
-        const fetchOrder = async () => {
+    const socketRef = useRef<Socket | null>(null)
+    const fetchOrder = async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/`)
             const resData = await res.json()
             setOder(resData.data)
-            console.log(res)
         }
-        // const fetchOrderItem = async () => {
-        //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders_item/`)
-        //     const resData = await res.json()
-        //     setOrderItem(resData.data)
-        // }        
+    useEffect(() => {
+        if(!socketRef.current){
+            socketRef.current = io(`${process.env.NEXT_PUBLIC_SOCKET_URL}`)
+            socketRef.current.on('connect', () => {
+                console.log('🟢 Socket connected:', socketRef.current?.id)
+            })
+            socketRef.current.on(`refreshOrders`,()=>{
+            fetchOrder()
+            })
+        }       
         fetchOrder()
-        // fetchOrderItem()
     }, [])
     return (
         <div>
