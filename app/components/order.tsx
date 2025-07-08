@@ -37,10 +37,6 @@ type userType = {
     u_userName: string
 }
 
-type userType = {
-    u_ID: number,
-    u_userName: string
-}
 export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_add, setShoworder_add] = useState(false)
     const [showorder_detail, setShoworder_detail] = useState(false)
@@ -48,6 +44,7 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_dalete, setShoworder_dalete] = useState(false)
     const [o_ID, seto_ID] = useState<number>(0)
     const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
+    const [userData, setUserData] = useState<userType[]>([])
     const [orderdateEnd, setorderdateEnd] = useState<dateEnd>()
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleString('th-TH');
@@ -106,8 +103,18 @@ export default function Order({ order }: { order: OrderType[] }) {
         }
         setorderdateEnd(resData.data)
     }
-    
-    const fetchOrdersItem = async (id:number)=>{
+    const fetchUser = async () => {
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/allUser`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
+        })
+        const resData = await res.json()
+        setUserData(resData.data)
+    }
+    const fetchOrdersItem = async (id: number) => {
         const token = localStorage.getItem('token')
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/ordersitems/` + id, {
             headers: {
