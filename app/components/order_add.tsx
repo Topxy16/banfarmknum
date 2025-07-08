@@ -34,7 +34,7 @@ export default function AddOrderModal({ show, onClose }: AddOrderModalProps) {
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
     try {
-      const res = await fetch('https://bnvw3t5t-8080.asse.devtunnels.ms/api/order/addOrders', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/order/addOrders`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
