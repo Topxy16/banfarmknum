@@ -16,20 +16,17 @@ type OrderType = {
     de_lastName: string,
     de_tel: string
 }
-type OrderItemType = {
-    oi_ID: number,
-    o_ID: number,
-    p_ID: number,
-    oi_amount: number,
-    oi_price: number,
-}
-
 export default function Page() {
     const [orderData, setOder] = useState<OrderType[]>([])
-    const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
     const socketRef = useRef<Socket | null>(null)
     const fetchOrder = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/`)
+        const token = localStorage.getItem('token')
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+            })
             const resData = await res.json()
             setOder(resData.data)
         }
@@ -42,12 +39,12 @@ export default function Page() {
             socketRef.current.on(`refreshOrders`,()=>{
             fetchOrder()
             })
-        }       
+        } 
+         
         fetchOrder()
     }, [])
     return (
         <div>
-            
             <div className='phone md:hidden'>
                 <div className='bg-zinc-100 p-2 text-4xl rounded-lg mb-2 text-white font-semibold'>ออเดอร์</div>
                 <div className='text-center flex gap-2'>

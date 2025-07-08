@@ -21,6 +21,16 @@ type OrderType = {
     de_firstName: string,
     de_lastName: string,
 }
+type OrderItemType = {
+    i_ID: number
+    i_Amount: number,
+    p_ID: number,
+    p_Name : string
+}
+
+type dateEnd = {
+    o_dateEnd: string
+}
 
 export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_add, setShoworder_add] = useState(false)
@@ -28,10 +38,11 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_update, setShoworder_update] = useState(false)
     const [showorder_dalete, setShoworder_dalete] = useState(false)
     const [o_ID , seto_ID] = useState<number>(0)
+    const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
+    const [orderdateEnd, setorderdateEnd] = useState<dateEnd>()
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleString('th-TH');
     };
-    
      const handleDelete = async (id: number) => {
         const token = localStorage.getItem('token')
         try {
@@ -55,7 +66,6 @@ export default function Order({ order }: { order: OrderType[] }) {
             setShoworder_dalete(false)
         }
     }
-    
     const updateStatus = async (id:number)=>{
         const token = localStorage.getItem('token')
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/updateStatusOrder`,{
@@ -73,14 +83,40 @@ export default function Order({ order }: { order: OrderType[] }) {
             console.log(`ไม่สามารถเปลี่ยนสถานะได้`)
         }
     }
-    useEffect(() => {
-  console.log('Component mounted or updated')
-}, [])
+    const fetchendDate = async (id:number)=> {
+         const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/getdateEnd/`+id,{
+             headers: {
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json'  
+                },
+        })
+        const resData = await res.json()
+        if (resData.status === 0){
+            console.log(`ไม่สามารถดึงข้อมูลวันที่ส่งในออเดอร์ หมายเลข  ${id}`)
+        }
+        setorderdateEnd(resData.data)
+    }
+    
+    const fetchOrdersItem = async (id:number)=>{
+        const token = localStorage.getItem('token')
+        const res = await fetch (`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/ordersitems/`+id,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json'  
+                },
+        })
+        const resData = await res.json()
+        if (resData.status === 0){
+            console.log(`ไม่สามารถดึงข้อมูลสินค้าในออเดอร์ หมายเลข  ${id}`)
+        }
+        setOrderItem(resData.data)
+    }    
     return (
         <div>
             <AddOrder show={showorder_add} onClose={() => setShoworder_add(false)} />
             <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
-            <UpdateOrder show={showorder_update} o_ID={o_ID} onClose={() => setShoworder_update(false)} />
+            <UpdateOrder show={showorder_update} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_update(false)} />
 
             <div className="phone md:hidden">
                 <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
@@ -198,10 +234,12 @@ export default function Order({ order }: { order: OrderType[] }) {
                                             </svg>
                                             </button>
                                         </div>
-                                        <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" onClick={() => {seto_ID(item.o_ID),setShoworder_update(true)}}>
+                                        <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" >
+                                            <button onClick={() => {setShoworder_update(true),fetchOrdersItem(item.o_ID),fetchendDate(item.o_ID)}}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
+                                            </button>
                                         </div>
                                     </div>
                                     </td>
