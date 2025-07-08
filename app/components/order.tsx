@@ -32,6 +32,10 @@ type dateEnd = {
     o_dateEnd: string
 }
 
+type userType = {
+    u_ID: number,
+    u_userName: string
+}
 export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_add, setShoworder_add] = useState(false)
     const [showorder_detail, setShoworder_detail] = useState(false)
@@ -40,6 +44,7 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [o_ID , seto_ID] = useState<number>(0)
     const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
     const [orderdateEnd, setorderdateEnd] = useState<dateEnd>()
+    const [userData , setUserData] = useState<userType[]>([])
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleString('th-TH');
     };
@@ -97,7 +102,17 @@ export default function Order({ order }: { order: OrderType[] }) {
         }
         setorderdateEnd(resData.data)
     }
-    
+    const fetchUser = async ()=>{
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/allUser`,{
+            headers: {
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json'  
+                },
+        })
+        const resData = await res.json()
+        setUserData(resData.data)
+    }
     const fetchOrdersItem = async (id:number)=>{
         const token = localStorage.getItem('token')
         const res = await fetch (`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/ordersitems/`+id,{
@@ -114,12 +129,12 @@ export default function Order({ order }: { order: OrderType[] }) {
     }    
     return (
         <div>
-            <AddOrder show={showorder_add} onClose={() => setShoworder_add(false)} />
+            <AddOrder show={showorder_add} userData={userData} onClose={() => setShoworder_add(false)} />
             <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
             <UpdateOrder show={showorder_update} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_update(false)} />
 
             <div className="phone md:hidden">
-                <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
+                <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => {fetchUser(),setShoworder_add(true) }}>
                     <div className="">เพิ่มออเดอร์</div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
