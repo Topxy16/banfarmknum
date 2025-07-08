@@ -1,56 +1,90 @@
 'use client'
 import Product from '../components/product'
 import AddProduct from '../components/product_add'
-import { useEffect, useRef,useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { io, Socket } from 'socket.io-client'
-    type ProductType = {
-        p_ID: number,
-        p_Name: string,
-        p_Detail: string,
-        p_Price: number,
-        p_Amount: number,
-        c_Name: string,
-        c_ID : number,
-        p_Status: number,
-        p_Img : string
-    }
-    type CategoryType = {
-        c_ID : number,
-        c_Name : string 
-    }
+type ProductType = {
+    p_ID: number,
+    p_Name: string,
+    p_Detail: string,
+    p_Price: number,
+    p_Amount: number,
+    c_Name: string,
+    c_ID: number,
+    p_Status: number,
+    p_Img: string
+}
+type CategoryType = {
+    c_ID: number,
+    c_Name: string
+}
 export default function page() {
-    const [showproduct_add, setShowproduct_add] = useState(false)
-    const [categoryData , setCategory] = useState<CategoryType[]>([])
+    const router = useRouter()
     const [productData, setProduct] = useState<ProductType[]>([])
+    const [categoryData, setCategory] = useState<CategoryType[]>([])
+    const [showproduct_add, setShowproduct_add] = useState(false)
     const socketRef = useRef<Socket | null>(null)
+
     const fetchProduct = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/`)
-            const resData = await res.json()
-            setProduct(resData.data)
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        const resData = await res.json()
+        setProduct(resData.data)
+    }
+    const fetchCategory = async () => {
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categorys/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        const resData = await res.json()
+        setCategory(resData.data)
+    }
+    useEffect(() => {
+        const checkToken = async () => {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                router.push('/login')
+                return
+            }
+            const check = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/checkLogin`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const res = await check.json()
+            if (res.status === 0) {
+                router.push('/login')
+                return
+            }
+            fetchProduct()
+            fetchCategory()
         }
-    useEffect (()=>{
-        if(!socketRef.current){
+        checkToken()
+
+        if (!socketRef.current) {
             socketRef.current = io(`${process.env.NEXT_PUBLIC_SOCKET_URL}`)
             socketRef.current.on('connect', () => {
                 console.log('🟢 Socket connected:', socketRef.current?.id)
             })
-            socketRef.current.on(`refreshProduct`,()=>{
-            fetchProduct()
-        })
+            socketRef.current.on(`refreshProduct`, () => {
+                fetchProduct()
+            })
         }
-       
-        const fetchCategory = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categorys/`)
-            const resData = await res.json()
-            setCategory(resData.data)
+        return () => {
+            socketRef.current?.disconnect()
+            socketRef.current = null
         }
-        fetchProduct()
-        fetchCategory()
-        return ()=>{
-             socketRef.current?.disconnect()
-                socketRef.current = null
-        }
-    },[])
+    }, [])
     return (
         <div>
             <div className="bg-white rounded-2xl p-1.5 w-full flex">
@@ -75,13 +109,13 @@ export default function page() {
             </div>
 
             <div>
-                <AddProduct category = {categoryData} show={showproduct_add} onClose={() => setShowproduct_add(false)} />
+                <AddProduct category={categoryData} show={showproduct_add} onClose={() => setShowproduct_add(false)} />
                 <div className=''>
                     <div>
                         {/* {product.map((item,index)=> <div key={index}> {item.p_Name} </div>  )} */}
-                        <Product product={productData} propsCategory={categoryData}  />
+                        <Product product={productData} propsCategory={categoryData} />
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     )
