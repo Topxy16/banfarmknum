@@ -17,7 +17,7 @@ type OrderItemType = {
 export default function UpdateOrderModal({orderdateEnd,orderItemData, show, onClose }: UpdateOrderModalProps) {
   if (!show) return null
   const [butterQty, setButterQty] = useState<{ [key: number]: number }>({}) 
-  
+  const [selectedDateTime, setSelectedDateTime] = useState<string>(orderdateEnd)
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
       <div className='bg-yellow-900 rounded-xl'>
@@ -48,6 +48,7 @@ export default function UpdateOrderModal({orderdateEnd,orderItemData, show, onCl
               ))}
             </div>
             <div className='text-sm'>วันที่ต้องส่ง</div>
+            
             <input type="date" 
               className='bg-gray-200 hover:bg-gray-300 rounded-xl p-2 w-full' />
             <div className="flex justify-end gap-2 pt-4">
