@@ -6,6 +6,7 @@ type UpdateOrderModalProps = {
   onClose: () => void
   orderItemData: OrderItemType[]
   orderdateEnd: string
+  o_ID : number
   
 }
 type OrderItemType = {
@@ -14,10 +15,36 @@ type OrderItemType = {
     p_ID: number,
     p_Name : string,
 }
-export default function UpdateOrderModal({orderdateEnd,orderItemData, show, onClose }: UpdateOrderModalProps) {
+export default function UpdateOrderModal({orderdateEnd,orderItemData, o_ID,show, onClose }: UpdateOrderModalProps) {
   if (!show) return null
-  const [butterQty, setButterQty] = useState<{ [key: number]: number }>({}) 
-  const [selectedDateTime, setSelectedDateTime] = useState<string>(orderdateEnd)
+  const [itemQty, setItemQty] = useState<{ [i_ID: number]: number }>({});
+  const [selectedDateTime, setSelectedDateTime] = useState<string>(
+  orderdateEnd ? orderdateEnd : ''
+)
+
+const HandleUpdate = async ()=>{
+    const token = localStorage.getItem('token');
+    const cart = orderItemData.map((item) => ({
+      i_ID: item.i_ID,
+      i_Amount: itemQty[item.i_ID] ?? item.i_Amount
+    }));
+    const payload = {
+      o_ID : o_ID,
+      o_endDate: new Date(selectedDateTime).toISOString(), // แปลงเวลาให้เป็น ISO
+      cart: cart
+    };
+    const res =  await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/updateOrder`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    });
+    const resData = await res.json()
+    //console.log(resData)
+  console.log(payload)
+}
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
       <div className='bg-yellow-900 rounded-xl'>
@@ -32,13 +59,13 @@ export default function UpdateOrderModal({orderdateEnd,orderItemData, show, onCl
               <div key={item.i_ID} className='items-center grid grid-cols-2 gap-2'>
                   <div  className='md:text-xl'>🧈 {item.p_Name}</div>
                 <div className='gap-2 flex'>
-                  <button  onClick={() => setButterQty(prev => ({ prev, [item.i_ID]: Math.max(0, (prev[item.i_ID] ?? item.i_Amount) - 1)}))}>
+                  <button  onClick={() => setItemQty(prev => ({...prev,[item.i_ID]: Math.max(0, (prev[item.i_ID] ?? item.i_Amount) - 1) }))}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-600 rounded-2xl">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                   </button>
-                  <span>{butterQty[item.i_ID] ?? item.i_Amount}</span>
-                  <button onClick={() => setButterQty(prev => ({ prev, [item.i_ID]: Math.max(0, (prev[item.i_ID] ?? item.i_Amount) + 1)}))}>
+                  <span>{itemQty[item.i_ID] ?? item.i_Amount}</span>
+                 <button  onClick={() => setItemQty(prev => ({...prev,[item.i_ID]: Math.max(0, (prev[item.i_ID] ?? item.i_Amount) + 1) }))}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-600 rounded-2xl">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
@@ -48,9 +75,12 @@ export default function UpdateOrderModal({orderdateEnd,orderItemData, show, onCl
               ))}
             </div>
             <div className='text-sm'>วันที่ต้องส่ง</div>
-            
-            <input type="date" 
-              className='bg-gray-200 hover:bg-gray-300 rounded-xl p-2 w-full' />
+            <input
+                className='bg-gray-200 hover:bg-gray-300 rounded-xl p-2 w-full'
+                type="datetime-local"
+                value={selectedDateTime}
+                onChange={(e) => setSelectedDateTime(e.target.value)}
+              />
             <div className="flex justify-end gap-2 pt-4">
               <button
                 onClick={onClose}
@@ -58,7 +88,7 @@ export default function UpdateOrderModal({orderdateEnd,orderItemData, show, onCl
               >
                 ยกเลิก
               </button>
-              <button
+              <button onClick={()=>{  HandleUpdate()     }}
                 className="bg-yellow-900 text-white px-4 py-2 rounded-xl hover:bg-yellow-700"
               >
                 แก้ไขข้อมูลออเดอร์

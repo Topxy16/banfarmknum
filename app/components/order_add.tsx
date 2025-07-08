@@ -36,7 +36,7 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
     if (porkQty > 0) {
       cart.push({ p_ID: 14, p_Amount: porkQty })
     }
-
+console.log(user)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/addOrder`, {
         method: 'POST',
@@ -50,7 +50,7 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
           cart: cart,
         }),
       })
-
+      
       const data = await res.json()
       console.log('✅ เพิ่มออเดอร์แล้ว:', data)
       onClose()
