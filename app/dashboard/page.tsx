@@ -10,15 +10,12 @@ import cardwallat from '../../public/08.png'
 import cardtool from '../../public/09.png'
 
 export default function page() {
-    
+
     return (
-        <div className='px-15'>
-            <div className="p-4">
-
-            </div>
-
+        <div className=''>
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-            <div className="w-srceen justify-center">
+
+            <div className="w-srceen justify-center hidden md:block">
                 <div className="bg-zinc-400 rounded-xl drop-shadow-2xl w-full p-2 mb-4">
                     <div className="p-4 text-3xl">ภาพรวมวันนี้</div>
                     <div className="flex gap-2 text-3xl">
