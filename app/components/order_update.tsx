@@ -43,14 +43,7 @@ export default function UpdateOrderModal({o_ID, show, onClose }: UpdateOrderModa
         <div className="bg-white shadow-xl w-90 p-6 md:w-120">
 
           <div className="space-y-3">
-            <div className='text-sm'>วันที่สั่ง</div>
-            <input type="date"
-              className='bg-gray-200 hover:bg-gray-300 rounded-xl p-2 w-full' />
-            <div className='text-sm'>ข้อมูลผู้สั่ง</div>
-            <div className='flex gap-2'>
-              <input type="text" className='flex-1 bg-gray-200 hover:bg-gray-300 rounded-xl p-2 w-full' placeholder='ชื่อผู้สั่งสินค้า' />
-              <input type="tel" className='flex-1 bg-gray-200 hover:bg-gray-300 rounded-xl p-2 w-full' placeholder='เบอร์โทรศัพท์' />
-            </div>
+            
 
             <div>
               <div className='text-sm'>สินค้า</div>
