@@ -1,6 +1,8 @@
 'use client'
 import Product from '../components/product'
 import AddProduct from '../components/product_add'
+import AlertToken from '../components/alertToken'
+
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { io, Socket } from 'socket.io-client'
@@ -20,6 +22,7 @@ type CategoryType = {
     c_Name: string
 }
 export default function page() {
+    const [setalerttoken, setAlerttoken] = useState(false)
     const router = useRouter()
     const [productData, setProduct] = useState<ProductType[]>([])
     const [categoryData, setCategory] = useState<CategoryType[]>([])
@@ -52,7 +55,10 @@ export default function page() {
         const checkToken = async () => {
             const token = localStorage.getItem('token')
             if (!token) {
-                router.push('/login')
+                setAlerttoken(true)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 3000)
                 return
             }
             const check = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/checkLogin`, {
@@ -63,7 +69,10 @@ export default function page() {
             })
             const res = await check.json()
             if (res.status === 0) {
-                router.push('/login')
+                setAlerttoken(true)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 3000)
                 return
             }
             fetchProduct()
@@ -87,6 +96,7 @@ export default function page() {
     }, [])
     return (
         <div>
+            <AlertToken message='คุณไม่มีสิทธิเข้าถึง' detail='กรุณาล็อกอินก่อนเข้าใช้งาน' show={setalerttoken} onClose={() => setAlerttoken} />
             <div className="bg-white rounded-2xl p-1.5 w-full flex">
                 <div className="bg-zinc-400 flex w-full p-1.5 rounded-2xl place-items-center">
                     <button>

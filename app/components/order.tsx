@@ -4,6 +4,8 @@ import AddOrder from '../components/order_add'
 import DetaillOrder from '../components/order_detail'
 import UpdateOrder from '../components/order_update'
 import DeleteOrder from '../components/order_delete'
+import AlertSuccessDel from '../components/alertSuccess'
+import AlertSuccessUpStatus from '../components/alertSuccess'
 
 type OrderType = {
     o_ID: number,
@@ -29,7 +31,7 @@ type OrderItemType = {
 }
 
 type dateEnd = {
-    o_ID:number ,
+    o_ID: number,
     o_endDate: string
 }
 
@@ -39,6 +41,8 @@ type userType = {
 }
 
 export default function Order({ order }: { order: OrderType[] }) {
+    const [setalertdel, setAlertdel] = useState(false)
+    const [setalertupstatus, setAlertupStatus] = useState(false)
     const [showorder_add, setShoworder_add] = useState(false)
     const [showorder_detail, setShoworder_detail] = useState(false)
     const [showorder_update, setShoworder_update] = useState(false)
@@ -61,11 +65,16 @@ export default function Order({ order }: { order: OrderType[] }) {
             })
             const resData = await res.json()
             if (resData.status === 1) {
-                console.log('Delete Order Successfully')
+                setShoworder_dalete(false)
+                setAlertdel(true)
+                setTimeout(() => {
+                    setAlertdel(false)
+                }, 2000);
+
             } else if (resData.status === 0) {
                 console.log('Delete Order Unsuccessfully')
             }
-            setShoworder_dalete(false)
+
         } catch (error) {
             console.log(error)
             console.log('Delete Product Unsuccessfully')
@@ -84,14 +93,18 @@ export default function Order({ order }: { order: OrderType[] }) {
         })
         const resData = await res.json()
         if (resData.status === 1) {
-            console.log(`   เปลี่ยนสถานะได้`)
+
+            setAlertupStatus(true)
+            setTimeout(() => {
+                setAlertupStatus(false)
+            }, 2000);
         } else if (resData.status === 0) {
             console.log(`ไม่สามารถเปลี่ยนสถานะได้`)
         }
     }
     const fetchendDate = async (id: number) => {
         const token = localStorage.getItem('token')
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/getdateEnd/`+id, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/getdateEnd/` + id, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'application/json'
@@ -130,6 +143,8 @@ export default function Order({ order }: { order: OrderType[] }) {
     }
     return (
         <div>
+            <AlertSuccessDel message='ลบออเดอร์สำเร็จ' detail='' show={setalertdel} onClose={() => { setAlertdel }} />
+            <AlertSuccessUpStatus message='ส่งสำเร็จแล้ว' detail='' show={setalertupstatus} onClose={() => { setAlertupStatus }} />
             <AddOrder show={showorder_add} userData={userData} onClose={() => setShoworder_add(false)} />
             <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
             <UpdateOrder show={showorder_update} o_ID={o_ID} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_update(false)} />
@@ -251,7 +266,7 @@ export default function Order({ order }: { order: OrderType[] }) {
                                                 </button>
                                             </div>
                                             <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" >
-                                                <button onClick={() => { setShoworder_update(true),seto_ID(item.o_ID), fetchOrdersItem(item.o_ID), fetchendDate(item.o_ID) }}>
+                                                <button onClick={() => { setShoworder_update(true), seto_ID(item.o_ID), fetchOrdersItem(item.o_ID), fetchendDate(item.o_ID) }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                     </svg>
@@ -278,7 +293,6 @@ export default function Order({ order }: { order: OrderType[] }) {
                 secondaryText="ยกเลิก"
                 onConfirm={() => {
                     handleDelete(o_ID)
-                    setShoworder_dalete(false)
                 }}
                 onSecondary={() => setShoworder_dalete(false)}
             />

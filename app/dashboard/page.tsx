@@ -1,18 +1,52 @@
 "use client"
 
+import { useRouter } from 'next/navigation'
+import { useEffect,useState } from 'react'
+
 import Chart from '../components/chart'
 import Piechart from '../components/piechart'
 import SavingGoal from "../components/goal"
-
+import AlertToken from '../components/alertToken'
 import Image from 'next/image'
 import bank from '../../public/bank.jpg'
 import cardwallat from '../../public/08.png'
 import cardtool from '../../public/09.png'
 
-export default function page() {
 
+export default function page() {
+    const router = useRouter()
+    const [setalerttoken, setAlerttoken] = useState(false)
+    useEffect(() => {
+        const checkToken = async () => {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                setAlerttoken(true)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 3000)
+                return
+            }
+            const check = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/checkLogin`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const res = await check.json()
+            if (res.status === 0) {
+                setAlerttoken(true)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 3000)
+                return
+            }
+
+        }
+        checkToken()
+    }, [])
     return (
         <div className=''>
+            <AlertToken message='คุณไม่มีสิทธิเข้าถึง' detail='กรุณาล็อกอินก่อนเข้าใช้งาน' show={setalerttoken} onClose={() => setAlerttoken} />
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
             <div className="w-srceen justify-center hidden md:block">

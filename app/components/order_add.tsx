@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Alert from '../components/alertSuccess'
 
 type AddOrderModalProps = {
   show: boolean
@@ -13,8 +14,9 @@ type userType = {
   u_userName: string
 }
 export default function AddOrderModal({ show, onClose, userData }: AddOrderModalProps) {
+  if (!show) return null
+  const [setalert, setAlert] = useState(false)
   const [user, setUser] = useState(0)
-  const [i_Amount, setI_amount] = useState('')
   const [o_endDate, setO_endDate] = useState('')
   const [butterQty, setButterQty] = useState(0)
   const [porkQty, setPorkQty] = useState(0)
@@ -22,7 +24,7 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
   const PRICE = 100
   const totalPrice = (butterQty + porkQty) * PRICE
 
-  if (!show) return null
+
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
@@ -36,7 +38,7 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
     if (porkQty > 0) {
       cart.push({ p_ID: 14, p_Amount: porkQty })
     }
-console.log(user)
+    console.log(user)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/addOrder`, {
         method: 'POST',
@@ -50,10 +52,14 @@ console.log(user)
           cart: cart,
         }),
       })
-      
       const data = await res.json()
       console.log('✅ เพิ่มออเดอร์แล้ว:', data)
-      onClose()
+      setAlert(true)
+      setTimeout(() => {
+        onClose()
+        setAlert(false)
+      }, 2000);
+
     } catch (err) {
       console.error('❌ เพิ่มออเดอร์ไม่สำเร็จ:', err)
     }
@@ -62,6 +68,7 @@ console.log(user)
 
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
+      <Alert message='เพิ่มออเดอร์สำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
       <div className='bg-green-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">เพิ่มออเดอร์</div>
         <div className="bg-white shadow-xl w-90 p-6 md:w-120">
@@ -91,13 +98,13 @@ console.log(user)
                 <div className='md:text-xl'>🧈 เนยน้ำตาล</div>
                 <div className='gap-2 flex'>
                   <button onClick={() => setButterQty(b => Math.max(0, b - 1))}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-600 rounded-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-200 rounded-2xl">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                   </button>
                   <span>{butterQty}</span>
                   <button onClick={() => setButterQty(b => b + 1)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-600 rounded-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-200 rounded-2xl">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                   </button>
@@ -105,13 +112,13 @@ console.log(user)
                 <div className='md:text-xl'>🐷 พริกเผาหมูหยอง</div>
                 <div className='gap-2 flex'>
                   <button onClick={() => setPorkQty(p => Math.max(0, p - 1))}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-600 rounded-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-red-400 hover:bg-red-200 rounded-2xl">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                   </button>
                   <span>{porkQty}</span>
                   <button onClick={() => setPorkQty(p => p + 1)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-600 rounded-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-400 hover:bg-green-200 rounded-2xl">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                   </button>

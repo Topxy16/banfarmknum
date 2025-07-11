@@ -4,7 +4,7 @@ import loginimg from '../../public/login.png'
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import AlertRegister from '../components/alertallaround'
+import AlertRegister from '../components/alertRegister'
 export default function Page() {
     const [modalOpen, setModalOpen] = useState(false)
     const router = useRouter();

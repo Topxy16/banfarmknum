@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import AlertPupdate from '../components/alertallaround'
+import AlertPupdate from './alertRegister'
 import React, { useState } from 'react'
 
 type UpdateProductModalProps = {
