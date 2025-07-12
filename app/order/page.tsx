@@ -1,7 +1,10 @@
 'use client'
+
 import Order from '../components/order'
-import { useEffect,useRef, useState } from 'react'
+import AlertToken from '../components/alertToken'
+import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
+import { useRouter } from 'next/navigation'
 type OrderType = {
     o_ID: number,
     u_ID: number,
@@ -17,34 +20,64 @@ type OrderType = {
     de_tel: string
 }
 export default function Page() {
+    const [setalerttoken, setAlerttoken] = useState(false)
+    const router = useRouter()
     const [orderData, setOder] = useState<OrderType[]>([])
     const socketRef = useRef<Socket | null>(null)
     const fetchOrder = async () => {
         const token = localStorage.getItem('token')
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/`,{
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'content-type': 'application/json'
-                },
-            })
-            const resData = await res.json()
-            setOder(resData.data)
-        }
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
+        })
+        const resData = await res.json()
+        setOder(resData.data)
+    }
     useEffect(() => {
-        if(!socketRef.current){
+        const checkToken = async () => {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                setAlerttoken(true)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 3000)
+                return
+            }
+            const check = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/checkLogin`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const res = await check.json()
+            if (res.status === 0) {
+                setAlerttoken(true)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 3000)
+                return
+            }
+            fetchOrder()
+        }
+        checkToken()
+
+        if (!socketRef.current) {
             socketRef.current = io(`${process.env.NEXT_PUBLIC_SOCKET_URL}`)
             socketRef.current.on('connect', () => {
                 console.log('🟢 Socket connected:', socketRef.current?.id)
             })
-            socketRef.current.on(`refreshOrders`,()=>{
-            fetchOrder()
+            socketRef.current.on(`refreshOrders`, () => {
+                fetchOrder()
             })
-        } 
-         
-        fetchOrder()
+        }
+
+
     }, [])
     return (
         <div>
+            <AlertToken message='คุณไม่มีสิทธิเข้าถึง' detail='กรุณาล็อกอินก่อนเข้าใช้งาน' show={setalerttoken} onClose={() => setAlerttoken} />
             <div className='phone md:hidden'>
                 <div className='bg-zinc-100 p-2 text-4xl rounded-lg mb-2 text-white font-semibold'>ออเดอร์</div>
                 <div className='text-center flex gap-2'>
@@ -63,7 +96,7 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-                <Order order={orderData}/>
+                <Order order={orderData} />
             </div>
             <div className='hidden w-full p-2 md:block'>
                 <div className='p-2 pt-4 text-3xl rounded-lg mb-2 text-black font-semibold'>สัปดาห์นี้</div>
@@ -111,7 +144,7 @@ export default function Page() {
                     </div>
                 </div>
                 <div className='mt-2'>
-                    <Order order={orderData}/>
+                    <Order order={orderData} />
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Alert from '../components/alertSuccess'
 
 type AddProductModalProps = {
   show: boolean
@@ -12,6 +13,7 @@ type CategoryType = {
   c_Name: string
 }
 export default function AddProductModal({ show, onClose, category }: AddProductModalProps) {
+  const [setalert, setAlert] = useState(false)
   const [p_Name, setName] = useState('')
   const [p_Detail, setDetail] = useState('')
   const [p_Price, setPrice] = useState('')
@@ -49,14 +51,18 @@ export default function AddProductModal({ show, onClose, category }: AddProductM
       })
       const data = await res.json()
       console.log('✅ เพิ่มสินค้าแล้ว:', data)
-      onClose()
+      setAlert(true)
+      setTimeout(() => {
+        onClose()
+        setAlert(false)
+      }, 2000);
     } catch (err) {
       console.error('❌ เพิ่มสินค้าไม่สำเร็จ:', err)
     }
   }
   return (
-
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
+      <Alert message='เพิ่มสินค้าสำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
       <div className='bg-green-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">เพิ่มสินค้า</div>
         <div className="bg-white shadow-xl w-90 max-w-md p-6">
