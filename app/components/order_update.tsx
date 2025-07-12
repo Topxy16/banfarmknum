@@ -21,7 +21,6 @@ export default function UpdateOrderModal({orderdateEnd,orderItemData, o_ID,show,
   const [selectedDateTime, setSelectedDateTime] = useState<string>(
   orderdateEnd ? orderdateEnd : ''
 )
-
 const HandleUpdate = async ()=>{
     const token = localStorage.getItem('token');
     const cart = orderItemData.map((item) => ({

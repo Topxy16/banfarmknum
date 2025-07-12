@@ -7,12 +7,41 @@ import Image from 'next/image'
 type OrderDetailModalProps = {
     show: boolean
     onClose: () => void
+    order : OrderType []
+    orderSelect : OrderItemType
+    orderdateEnd : dateEnd
 }
 
-export default function OrderDetailModal({ show, onClose }: OrderDetailModalProps) {
+type OrderType = {
+    o_ID: number,
+    u_userName: string,
+    de_tel: number,
+    o_date: string,
+    o_endDate: string,
+    o_image: string,
+    o_Status: number,
+    i_Price: number,
+    p_Name: string,
+    p_Detail: string
+    latitude: string,
+    longitude: string
+    de_firstName: string,
+    de_lastName: string,
+}
+type OrderItemType = {
+    i_ID: number
+    i_Amount: number,
+    p_ID: number,
+    p_Name: string
+}
+
+type dateEnd = {
+    o_endDate: string
+}
+export default function OrderDetailModal({ show, onClose ,orderSelect ,orderdateEnd ,  orderItemData }: OrderDetailModalProps) {
 
     if (!show) return null
-
+    console.log(orderSelect)
     return (
         <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
             <div className="bg-white rounded-xl shadow-xl w-90 max-w-md p-6">
@@ -33,11 +62,13 @@ export default function OrderDetailModal({ show, onClose }: OrderDetailModalProp
                 </div>
                 <div className="bg-gray-200 rounded-2xl p-4 mt-2">
                     <div className="text-xl mb-1">รายการสินค้า</div>
-                    <div className="flex place-content-between">
-
-                        <div className="">🧈 เนยน้ำตาล</div>
-                        <div className="font-bold mr-4">1</div>
-                    </div>
+                    { orderItemData.map( (item:OrderItemType) => (
+                        <div className="flex place-content-between" key={item.i_ID}>
+                            <div className="">🧈 {item.p_Name}</div>
+                            <div className="font-bold mr-4">{item.i_Amount}</div>
+                        </div>
+                    ))}
+                    
                     <div className="flex place-content-between">
 
                         <div className="">🐷 พริกเผาหมูหยอง</div>

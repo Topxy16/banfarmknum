@@ -29,7 +29,6 @@ type OrderItemType = {
 }
 
 type dateEnd = {
-    o_ID:number ,
     o_endDate: string
 }
 
@@ -37,7 +36,22 @@ type userType = {
     u_ID: number,
     u_userName: string
 }
-
+type orderSelectType ={
+    o_ID: number,
+    u_userName: string,
+    de_tel: number,
+    o_date: string,
+    o_endDate: string,
+    o_image: string,
+    o_Status: number,
+    i_Price: number,
+    p_Name: string,
+    p_Detail: string
+    latitude: string,
+    longitude: string
+    de_firstName: string,
+    de_lastName: string,
+}
 export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_add, setShoworder_add] = useState(false)
     const [showorder_detail, setShoworder_detail] = useState(false)
@@ -45,7 +59,9 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [showorder_dalete, setShoworder_dalete] = useState(false)
     const [o_ID, seto_ID] = useState<number>(0)
     const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
+    const [userData, setUserData] = useState<userType[]>([])
     const [orderdateEnd, setorderdateEnd] = useState<dateEnd>()
+    const [orderSelect , setorderSelect] = useState<orderSelectType>()
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleString('th-TH');
     };
@@ -128,12 +144,13 @@ export default function Order({ order }: { order: OrderType[] }) {
         }
         setOrderItem(resData.data)
     }
+
     return (
         <div>
             <AddOrder show={showorder_add} userData={userData} onClose={() => setShoworder_add(false)} />
-            <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
+            <DetaillOrder show={showorder_detail} orderSelect={orderSelect} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_detail(false)} />
             <UpdateOrder show={showorder_update} o_ID={o_ID} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_update(false)} />
-
+            
             <div className="phone md:hidden">
                 <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
                     <div className="">เพิ่มออเดอร์</div>
@@ -251,14 +268,14 @@ export default function Order({ order }: { order: OrderType[] }) {
                                                 </button>
                                             </div>
                                             <div className="bg-yellow-900 hover:bg-yellow-600 text-white rounded-lg ml-1 px-2 h-10 pt-2" >
-                                                <button onClick={() => { setShoworder_update(true),seto_ID(item.o_ID), fetchOrdersItem(item.o_ID), fetchendDate(item.o_ID) }}>
+                                                <button onClick={() => { setShoworder_update(true), fetchOrdersItem(item.o_ID), fetchendDate(item.o_ID) }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                     </svg>
                                                 </button>
                                             </div>
                                         </div>
-                                        <button className="mt-4 mr-1" onClick={() => setShoworder_detail(true)}>
+                                        <button className="mt-4 mr-1" onClick={() => {fetchOrdersItem(item.o_ID),fetchendDate(item.o_ID) ,setorderSelect(item), setShoworder_detail(true)}}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 rounded-4xl hover:bg-gray-300">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
