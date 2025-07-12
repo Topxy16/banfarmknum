@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 import Alert from '../components/alertSuccess'
+import AlertF from '../components/alertFail'
+import AlertFinput from '../components/alertFail'
 
 type AddOrderModalProps = {
   show: boolean
@@ -16,6 +18,8 @@ type userType = {
 export default function AddOrderModal({ show, onClose, userData }: AddOrderModalProps) {
   if (!show) return null
   const [setalert, setAlert] = useState(false)
+  const [setalertF, setAlertF] = useState(false)
+  const [setalertFinput, setAlertFinput] = useState(false)
   const [user, setUser] = useState(0)
   const [o_endDate, setO_endDate] = useState('')
   const [butterQty, setButterQty] = useState(0)
@@ -28,6 +32,14 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
+
+    if (!o_endDate || user === 0 || (butterQty === 0 && porkQty === 0)) {
+      setAlertFinput(true)
+      setTimeout(() => {
+        setAlertFinput(false)
+      }, 1500);
+      return
+    }
 
     const cart = []
 
@@ -52,14 +64,21 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
           cart: cart,
         }),
       })
-      const data = await res.json()
-      console.log('✅ เพิ่มออเดอร์แล้ว:', data)
-      setAlert(true)
-      setTimeout(() => {
-        onClose()
-        setAlert(false)
-      }, 2000);
-
+      const resData = await res.json()
+      console.log('✅ เพิ่มออเดอร์แล้ว:', resData)
+      if (resData.status === 1) {
+        setAlert(true)
+        setTimeout(() => {
+          onClose()
+          setAlert(false)
+        }, 2000);
+      } else if (resData.status === 0) {
+        setAlertF(true)
+        setTimeout(() => {
+          onClose()
+          setAlertF(false)
+        }, 2000);
+      }
     } catch (err) {
       console.error('❌ เพิ่มออเดอร์ไม่สำเร็จ:', err)
     }
@@ -68,7 +87,9 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
 
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
-      <Alert message='เพิ่มออเดอร์สำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+      <Alert message='เพิ่มข้อมูลออเดอร์สำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+      <AlertF message='เพิ่มข้อมูลออเดอร์ไม่สำเร็จ' detail='' show={setalertF} onClose={() => { setAlertF }} />
+      <AlertFinput message='กรุณากรอกข้อมูลให้ครบถ้วน' detail='' show={setalertFinput} onClose={() => { setAlertFinput }} />
       <div className='bg-green-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">เพิ่มออเดอร์</div>
         <div className="bg-white shadow-xl w-90 p-6 md:w-120">
@@ -78,13 +99,17 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
               type="date"
               className="w-full bg-gray-200 hover:bg-gray-300 rounded-xl p-2"
               onChange={(e) => setO_endDate(e.target.value)}
+              required
             />
 
             <div className='text-sm'>ข้อมูลผู้สั่ง</div>
             <div className='flex gap-2'>
               <select className='w-full rounded-lg p-1.5 bg-gray-200 hover:bg-gray-300' onChange={(e) => (setUser(Number(e.target.value)))}>
+
                 {userData.map((item, index) => (
+
                   <option key={index} value={item.u_ID}>
+
                     {item.u_userName}
                   </option>
                 ))}

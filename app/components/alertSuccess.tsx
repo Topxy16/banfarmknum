@@ -17,7 +17,7 @@ export default function AlertModalProps({ message, detail, show, onClose }: Aler
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
         </div>
-        <div className="text-3xl font-bold mb-2">{message}</div>
+        <div className="text-2xl font-bold mb-2">{message}</div>
         <p className="text-sm mb-4">{detail}</p>
       </div>
     </div>

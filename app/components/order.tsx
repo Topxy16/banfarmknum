@@ -6,6 +6,8 @@ import UpdateOrder from '../components/order_update'
 import DeleteOrder from '../components/order_delete'
 import AlertSuccessDel from '../components/alertSuccess'
 import AlertSuccessUpStatus from '../components/alertSuccess'
+import AlertFailDel from '../components/alertFail'
+import AlertFailUpStatus from '../components/alertFail'
 
 type OrderType = {
     o_ID: number,
@@ -41,6 +43,8 @@ type userType = {
 }
 
 export default function Order({ order }: { order: OrderType[] }) {
+    const [setalertFdel, setAlertFdel] = useState(false)
+    const [setalertFstatus, setAlertFstatus] = useState(false)
     const [setalertdel, setAlertdel] = useState(false)
     const [setalertupstatus, setAlertupStatus] = useState(false)
     const [showorder_add, setShoworder_add] = useState(false)
@@ -71,9 +75,12 @@ export default function Order({ order }: { order: OrderType[] }) {
                 setTimeout(() => {
                     setAlertdel(false)
                 }, 2000);
-
             } else if (resData.status === 0) {
-                console.log('Delete Order Unsuccessfully')
+                setShoworder_dalete(false)
+                setAlertFdel(true)
+                setTimeout(() => {
+                    setAlertFdel(false)
+                }, 2000);
             }
 
         } catch (error) {
@@ -100,7 +107,10 @@ export default function Order({ order }: { order: OrderType[] }) {
                 setAlertupStatus(false)
             }, 2000);
         } else if (resData.status === 0) {
-            console.log(`ไม่สามารถเปลี่ยนสถานะได้`)
+            setAlertFstatus(true)
+            setTimeout(() => {
+                setAlertFstatus(false)
+            }, 2000);
         }
     }
     const fetchendDate = async (id: number) => {
@@ -144,8 +154,10 @@ export default function Order({ order }: { order: OrderType[] }) {
     }
     return (
         <div>
-            <AlertSuccessDel message='ลบออเดอร์สำเร็จ' detail='' show={setalertdel} onClose={() => { setAlertdel }} />
-            <AlertSuccessUpStatus message='ส่งสำเร็จแล้ว' detail='' show={setalertupstatus} onClose={() => { setAlertupStatus }} />
+            <AlertFailDel message='ลบข้อมูลออเดอร์ไม่สำเร็จ' detail='' show={setalertFdel} onClose={() => { setAlertFdel }} />
+            <AlertFailUpStatus message='อัพเดทสถาะการจัดส่งไม่สำเร็จ' detail='' show={setalertFstatus} onClose={() => { setAlertFstatus }} />
+            <AlertSuccessDel message='ลบข้อมูลออเดอร์สำเร็จ' detail='' show={setalertdel} onClose={() => { setAlertdel }} />
+            <AlertSuccessUpStatus message='อัพเดทสถาะการจัดส่งสำเร็จ' detail='' show={setalertupstatus} onClose={() => { setAlertupStatus }} />
             <AddOrder show={showorder_add} userData={userData} onClose={() => setShoworder_add(false)} />
             <DetaillOrder show={showorder_detail} onClose={() => setShoworder_detail(false)} />
             <UpdateOrder show={showorder_update} o_ID={o_ID} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_update(false)} />

@@ -1,9 +1,7 @@
 "use client"
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 export default function aside() {
-    const router = useRouter()
     const [hasToken, setHasToken] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)

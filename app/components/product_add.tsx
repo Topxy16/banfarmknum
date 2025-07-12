@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react'
 import Alert from '../components/alertSuccess'
-
+import AlertF from '../components/alertFail'
+import AlertFinput from '../components/alertFail'
 type AddProductModalProps = {
   show: boolean
   onClose: () => void
@@ -14,10 +15,11 @@ type CategoryType = {
 }
 export default function AddProductModal({ show, onClose, category }: AddProductModalProps) {
   const [setalert, setAlert] = useState(false)
+  const [setalertF, setAlertF] = useState(false)
+  const [setalertFinput, setAlertFinput] = useState(false)
   const [p_Name, setName] = useState('')
   const [p_Detail, setDetail] = useState('')
   const [p_Price, setPrice] = useState('')
-  const [p_Amount, setAmount] = useState('')
   const [c_ID, setCategory] = useState(0)
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -34,6 +36,14 @@ export default function AddProductModal({ show, onClose, category }: AddProductM
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
 
+    if (!c_ID || p_Name === '' || p_Price === '' || p_Detail === '') {
+      setAlertFinput(true)
+      setTimeout(() => {
+        setAlertFinput(false)
+      }, 1500);
+      return
+    }
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/addProduct`, {
         method: 'POST',
@@ -45,17 +55,25 @@ export default function AddProductModal({ show, onClose, category }: AddProductM
           'p_Name': p_Name,
           'p_Detail': p_Detail,
           'p_Price': p_Price,
-          'p_Amount': p_Amount,
           'c_ID': c_ID
         }),
       })
-      const data = await res.json()
-      console.log('✅ เพิ่มสินค้าแล้ว:', data)
-      setAlert(true)
-      setTimeout(() => {
-        onClose()
-        setAlert(false)
-      }, 2000);
+      const resData = await res.json()
+      console.log('✅ เพิ่มสินค้าแล้ว:', resData)
+      if (resData.status === 1) {
+        setAlert(true)
+        setTimeout(() => {
+          onClose()
+          setAlert(false)
+        }, 2000);
+      } else if (resData.status === 0) {
+        setAlertF(true)
+        setTimeout(() => {
+          onClose()
+          setAlertF(false)
+        }, 2000);
+      }
+
     } catch (err) {
       console.error('❌ เพิ่มสินค้าไม่สำเร็จ:', err)
     }
@@ -63,6 +81,8 @@ export default function AddProductModal({ show, onClose, category }: AddProductM
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
       <Alert message='เพิ่มสินค้าสำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+      <AlertF message='เพิ่มสินค้าไม่สำเร็จ' detail='' show={setalertF} onClose={() => { setAlertF }} />
+      <AlertFinput message='กรุณากรอกข้อมูลให้ครบถ้วน' detail='' show={setalertFinput} onClose={() => { setAlertFinput }} />
       <div className='bg-green-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">เพิ่มสินค้า</div>
         <div className="bg-white shadow-xl w-90 max-w-md p-6">

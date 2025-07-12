@@ -1,6 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Alert from '../components/alertSuccess'
+import AlertF from '../components/alertFail'
+import AlertFinput from '../components/alertFail'
 type UpdateOrderModalProps = {
   show: boolean
   onClose: () => void
@@ -18,6 +20,8 @@ type OrderItemType = {
 export default function UpdateOrderModal({ orderdateEnd, orderItemData, o_ID, show, onClose }: UpdateOrderModalProps) {
   if (!show) return null
   const [setalert, setAlert] = useState(false)
+  const [setalertF, setAlertF] = useState(false)
+  const [setalertFinput, setAlertFinput] = useState(false)
   const [itemQty, setItemQty] = useState<{ [i_ID: number]: number }>({});
   const [selectedDateTime, setSelectedDateTime] = useState<string>(
     orderdateEnd ? orderdateEnd : ''
@@ -50,13 +54,18 @@ export default function UpdateOrderModal({ orderdateEnd, orderItemData, o_ID, sh
         setAlert(false)
       }, 2000);
     } else if (resData.status === 0) {
-      console.log('ไม่ได้')
+      setAlertF(true)
+      setTimeout(() => {
+        onClose()
+        setAlertF(false)
+      }, 2000);
     }
     console.log(payload)
   }
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
-      <Alert message='เพิ่มออเดอร์สำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+      <Alert message='แก้ไขข้อมูลออเดอร์สำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+      <AlertF message='แก้ไขข้อมูลออเดอร์ไม่สำเร็จ' detail='' show={setalertF} onClose={() => { setAlertF }} />
       <div className='bg-yellow-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">แก้ไขข้อมูลออเดอร์</div>
         <div className="bg-white shadow-xl w-90 p-6 md:w-120">

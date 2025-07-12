@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import AlertPupdate from './alertRegister'
+import Alert from '../components/alertSuccess'
+import AlertF from '../components/alertFail'
 import React, { useState } from 'react'
 
 type UpdateProductModalProps = {
@@ -25,8 +26,8 @@ type ProductType = {
   p_Img: string,
 }
 export default function UpdateProductModal({ show, propsCategory, productUpdate, onClose }: UpdateProductModalProps) {
-  const router = useRouter();
-  const [showalert, setShowalert] = useState(false)
+  const [setalert, setAlert] = useState(false)
+  const [setalertF, setAlertF] = useState(false)
   const [p_Name, setName] = useState(productUpdate.p_Name)
   const [p_Detail, setDetail] = useState(productUpdate.p_Detail)
   const [p_Price, setPrice] = useState(productUpdate.p_Price)
@@ -67,17 +68,27 @@ export default function UpdateProductModal({ show, propsCategory, productUpdate,
       })
       const resData = await res.json()
       if (resData.status === 1) {
-        console.log('✅ แก้ไขข้อมูลสินค้าแล้ว:')
+        setAlert(true)
+        setTimeout(() => {
+          onClose()
+          setAlert(false)
+        }, 2000);
       } else if (resData.status === 0) {
-        console.error('❌ แก้ไขข้อมูลสินค้าไม่สำเร็จ:')
+        setAlertF(true)
+        setTimeout(() => {
+          onClose()
+          setAlertF(false)
+        }, 2000);
       }
-      onClose()
+
     } catch (err) {
       console.error('❌ แก้ไขข้อมูลสินค้าไม่สำเร็จ:', err)
     }
   }
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
+      <Alert message='แก้ไขข้อมูลสินค้าสำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+      <AlertF message='แก้ไขข้อมูลสินค้าไม่สำเร็จ' detail='' show={setalertF} onClose={() => { setAlertF }} />
       <div className='bg-yellow-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">แก้ไขข้อมูลสินค้า</div>
         <div className="bg-white shadow-xl w-90 max-w-md p-6">
