@@ -1,11 +1,38 @@
 "use client"
 import Catalog from "../components/catalog"
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
+type catalogType = {
+    p_ID: number,
+    p_Name: string,
+    p_Detail: string,
+    p_Price: number,
+    p_Amount: number,
+    c_Name: string,
+    c_ID: number,
+    p_Status: number,
+    p_Img: string
+    }
 export default function page() {
+    const [catalog , setCatalog] = useState<catalogType[]>([])
+    const fetchProduct = async () => {
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        const resData = await res.json()
+        setCatalog(resData.data)
+    }
+    useEffect (()=>{
+        fetchProduct()
+    },[])
     return (
         <div>
             <div>สั่งสินค้า</div>
-            <Catalog/>
+            <Catalog catalog={catalog}/>
             <div className="flex place-content-between items-center p-4 rounded-xl fixed bottom-0 left-0 w-full h-30 bg-gray-300 ">
                 <button className="w-full items-center flex place-content-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-10 text-white">

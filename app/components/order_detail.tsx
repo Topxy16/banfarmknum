@@ -1,15 +1,15 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import neyor from '../../public/neyor.png'
 import Image from 'next/image'
 
 type OrderDetailModalProps = {
     show: boolean
     onClose: () => void
-    order : OrderType []
-    orderSelect : OrderItemType
-    orderdateEnd : dateEnd
+    orderSelect : OrderType
+    orderItemData : OrderItemType[]
+    sum: number
 }
 
 type OrderType = {
@@ -35,13 +35,11 @@ type OrderItemType = {
     p_Name: string
 }
 
-type dateEnd = {
-    o_endDate: string
-}
-export default function OrderDetailModal({ show, onClose ,orderSelect ,orderdateEnd ,  orderItemData }: OrderDetailModalProps) {
-
+export default function OrderDetailModal({ show, onClose,orderSelect ,sum ,  orderItemData }: OrderDetailModalProps) {
+    const formatDate = (dateStr: string) => {
+        return new Date(dateStr).toLocaleString('th-TH');
+    };
     if (!show) return null
-    console.log(orderSelect)
     return (
         <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
             <div className="bg-white rounded-xl shadow-xl w-90 max-w-md p-6">
@@ -53,34 +51,28 @@ export default function OrderDetailModal({ show, onClose ,orderSelect ,orderdate
                 <div className="text-2xl font-bold text-center mb-4">รายละเอียดออเดอร์</div>
                 <div className="flex gap-2 text-xl">
                     <div>เลขออร์เดอร์ : </div>
-                    <div>#9324872</div>
+                    <div>{orderSelect.o_ID}</div>
                 </div>
                 <div className="ml-2">
-                    <div>วันที่สั่ง : 02/07/2025</div>
-                    <div>ชื่อผู้สั่งสินค้า : พี่ชาวี</div>
-                    <div>เบอร์โทรศัพท์ : 0926166623</div>
+                    <div>วันที่สั่ง : {formatDate(orderSelect.o_date)}</div>
+                    <div>ชื่อผู้สั่งสินค้า : {orderSelect.u_userName}</div>
+                    <div>เบอร์โทรศัพท์ : {orderSelect.de_tel}</div>
                 </div>
                 <div className="bg-gray-200 rounded-2xl p-4 mt-2">
                     <div className="text-xl mb-1">รายการสินค้า</div>
                     { orderItemData.map( (item:OrderItemType) => (
                         <div className="flex place-content-between" key={item.i_ID}>
-                            <div className="">🧈 {item.p_Name}</div>
+                            <div className="">{item.p_Name}</div>
                             <div className="font-bold mr-4">{item.i_Amount}</div>
                         </div>
                     ))}
-                    
-                    <div className="flex place-content-between">
-
-                        <div className="">🐷 พริกเผาหมูหยอง</div>
-                        <div className="font-bold mr-4">1</div>
-                    </div>
                     <div className="flex place-content-between mt-1 p-1">
                         <div>รวม</div>
-                        <div>200</div>
+                        <div>{sum}</div>
                     </div>
                 </div>
                 <div className="mt-2 flex place-content-between items-center">
-                    <div className="">วันที่ต้องส่ง : 04/07/2025</div>
+                    <div className="">วันที่ต้องส่ง : {formatDate(orderSelect.o_endDate)}</div>
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8 text-green-400">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
