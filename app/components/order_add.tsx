@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 import Alert from '../components/alertSuccess'
+import AlertF from '../components/alertFail'
+import AlertI from '../components/alertinput'
 
 type AddOrderModalProps = {
   show: boolean
@@ -16,6 +18,8 @@ type userType = {
 export default function AddOrderModal({ show, onClose, userData }: AddOrderModalProps) {
   if (!show) return null
   const [setalert, setAlert] = useState(false)
+  const [setalertf, setAlertf] = useState(false)
+  const [setalerti, setAlerti] = useState(false)
   const [user, setUser] = useState(0)
   const [o_endDate, setO_endDate] = useState('')
   const [butterQty, setButterQty] = useState(0)
@@ -29,6 +33,13 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
 
+    if (!o_endDate || user === 0 || (butterQty === 0 && porkQty === 0)) {
+      setAlerti(true)
+      setTimeout(() => {
+        setAlerti(false)
+      }, 2000);
+      return
+    }
     const cart = []
 
     if (butterQty > 0) {
@@ -52,16 +63,22 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
           cart: cart,
         }),
       })
-      const data = await res.json()
-      console.log('✅ เพิ่มออเดอร์แล้ว:', data)
-      setAlert(true)
-      setTimeout(() => {
-        onClose()
-        setAlert(false)
-      }, 2000);
-
+      const resData = await res.json()
+      if (resData.status === 1) {
+        setAlert(true)
+        setTimeout(() => {
+          onClose()
+          setAlert(false)
+        }, 2000);
+      } else if (resData.status === 0) {
+        setAlertf(true)
+        setTimeout(() => {
+          onClose()
+          setAlertf(false)
+        }, 2000);
+      }
     } catch (err) {
-      console.error('❌ เพิ่มออเดอร์ไม่สำเร็จ:', err)
+      console.error(err)
     }
   }
 
@@ -69,6 +86,8 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
   return (
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
       <Alert message='เพิ่มออเดอร์สำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+      <AlertF message='เพิ่มออเดอร์ไม่สำเร็จ' detail='' show={setalertf} onClose={() => { setAlertf }} />
+      <AlertI message='เพิ่มออเดอร์ไม่สำเร็จ' detail='' show={setalerti} onClose={() => { setAlerti }} />
       <div className='bg-green-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">เพิ่มออเดอร์</div>
         <div className="bg-white shadow-xl w-90 p-6 md:w-120">

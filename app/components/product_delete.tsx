@@ -20,30 +20,6 @@ export default function ProductDeleteModal({
   secondaryText = 'ยกเลิก'
 }: DeleteProductModalProps) {
   if (!show) return null;
-  const deleteProduct = async (productId: string) => {
-    const token = localStorage.getItem('token')
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${productId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      if (!res.ok) {
-        throw new Error('ลบสินค้าไม่สำเร็จ')
-      }
-
-      const result = await res.json()
-      console.log('✅ ลบสินค้าแล้ว:', result)
-
-      // ทำสิ่งที่ต้องทำหลังลบ เช่น รีเฟรชหน้าหรือ reload สินค้าใหม่
-    } catch (error) {
-      console.error('❌ เกิดข้อผิดพลาด:', error)
-    }
-  }
-
   return (
     <div className="fixed inset-0 z-50 bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
       <div className="bg-red-900 rounded-xl">

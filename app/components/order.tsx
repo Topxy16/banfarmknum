@@ -6,6 +6,8 @@ import UpdateOrder from '../components/order_update'
 import DeleteOrder from '../components/order_delete'
 import AlertSuccessDel from '../components/alertSuccess'
 import AlertSuccessUpStatus from '../components/alertSuccess'
+import AlertFdel from '../components/alertFail'
+import AlertFstatus from '../components/alertFail'
 
 type OrderType = {
     o_ID: number,
@@ -41,7 +43,9 @@ type userType = {
 }
 export default function Order({ order }: { order: OrderType[] }) {
     const [setalertdel, setAlertdel] = useState(false)
+    const [setalertfdel, setAlertfdel] = useState(false)
     const [setalertupstatus, setAlertupStatus] = useState(false)
+    const [setalertfupstatus, setAlertfupStatus] = useState(false)
     const [showorder_add, setShoworder_add] = useState(false)
     const [showorder_detail, setShoworder_detail] = useState(false)
     const [showorder_update, setShoworder_update] = useState(false)
@@ -50,7 +54,7 @@ export default function Order({ order }: { order: OrderType[] }) {
     const [orderItemData, setOrderItem] = useState<OrderItemType[]>([])
     const [userData, setUserData] = useState<userType[]>([])
     const [orderdateEnd, setorderdateEnd] = useState<dateEnd>()
-    const [orderSelect , setorderSelect] = useState<OrderType>()
+    const [orderSelect, setorderSelect] = useState<OrderType>()
     const [sum, setSum] = useState<number>(0)
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleString('th-TH');
@@ -74,7 +78,11 @@ export default function Order({ order }: { order: OrderType[] }) {
                 }, 2000);
 
             } else if (resData.status === 0) {
-                console.log('Delete Order Unsuccessfully')
+                setShoworder_dalete(false)
+                setAlertfdel(true)
+                setTimeout(() => {
+                    setAlertfdel(false)
+                }, 2000);
             }
 
         } catch (error) {
@@ -101,7 +109,10 @@ export default function Order({ order }: { order: OrderType[] }) {
                 setAlertupStatus(false)
             }, 2000);
         } else if (resData.status === 0) {
-            console.log(`ไม่สามารถเปลี่ยนสถานะได้`)
+            setAlertfupStatus(true)
+            setTimeout(() => {
+                setAlertfupStatus(false)
+            }, 2000);
         }
     }
     const fetchendDate = async (id: number) => {
@@ -143,10 +154,10 @@ export default function Order({ order }: { order: OrderType[] }) {
         }
         setOrderItem(resData.data)
     }
-    const fetchPrice = async (id :number)=>{
+    const fetchPrice = async (id: number) => {
         const token = localStorage.getItem('token')
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/sumPrice/` + id , {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/sumPrice/` + id, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'content-type': 'application/json'
@@ -157,16 +168,18 @@ export default function Order({ order }: { order: OrderType[] }) {
         } catch (error) {
             console.log(error)
         }
-        
+
     }
     return (
         <div>
             <AlertSuccessDel message='ลบออเดอร์สำเร็จ' detail='' show={setalertdel} onClose={() => { setAlertdel }} />
             <AlertSuccessUpStatus message='ส่งสำเร็จแล้ว' detail='' show={setalertupstatus} onClose={() => { setAlertupStatus }} />
+            <AlertFdel message='ลบออเดอร์ไม่สำเร็จ' detail='' show={setalertfdel} onClose={() => { setAlertfdel }} />
+            <AlertFstatus message='ส่งไม่สำเร็จแล้ว' detail='' show={setalertfupstatus} onClose={() => { setAlertfupStatus }} />
             <AddOrder show={showorder_add} userData={userData} onClose={() => setShoworder_add(false)} />
-            <DetaillOrder show={showorder_detail}  sum={sum} orderSelect={orderSelect} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_detail(false)} />
+            <DetaillOrder show={showorder_detail} sum={sum} orderSelect={orderSelect} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_detail(false)} />
             <UpdateOrder show={showorder_update} o_ID={o_ID} orderdateEnd={orderdateEnd} orderItemData={orderItemData} onClose={() => setShoworder_update(false)} />
-            
+
             <div className="phone md:hidden">
                 <button className="w-full bg-green-900 rounded-xl p-2 mt-2 text-white text-2xl flex items-center place-content-between" onClick={() => { setShoworder_add(true) }}>
                     <div className="">เพิ่มออเดอร์</div>
@@ -291,7 +304,7 @@ export default function Order({ order }: { order: OrderType[] }) {
                                                 </button>
                                             </div>
                                         </div>
-                                        <button className="mt-4 mr-1" onClick={() => {fetchPrice(item.o_ID),fetchOrdersItem(item.o_ID),fetchendDate(item.o_ID) ,seto_ID(item.o_ID),setorderSelect(item), setShoworder_detail(true)}}>
+                                        <button className="mt-4 mr-1" onClick={() => { fetchPrice(item.o_ID), fetchOrdersItem(item.o_ID), fetchendDate(item.o_ID), seto_ID(item.o_ID), setorderSelect(item), setShoworder_detail(true) }}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7 rounded-4xl hover:bg-gray-300">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>

@@ -3,7 +3,11 @@ import Image from 'next/image'
 import loginimg from '../../public/login.png'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import Alert from '../components/alertSuccess'
+import AlertF from '../components/alertFail'
 export default function Page() {
+    const [setalert, setAlert] = useState(false)
+    const [setalertf, setAlertf] = useState(false)
     const [username, setName] = useState("")
     const [password, setPass] = useState("")
 
@@ -16,12 +20,22 @@ export default function Page() {
         const resData = await res.json()
         if (resData.status === 1) {
             localStorage.setItem('token', resData.token)
-            location.href = '/dashboard'
-
+            setAlert(true)
+            setTimeout(() => {
+                location.href = '/dashboard'
+                setAlert(false)
+            }, 2000);
+        } else if (resData.status === 0) {
+            setAlert(true)
+            setTimeout(() => {
+                setAlert(false)
+            }, 2000);
         }
     }
     return (
         <div>
+            <Alert message='เข้าสู่ระบบสำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
+                  <AlertF message='เข้าสู่ระบบไม่สำเร็จ' detail='' show={setalertf} onClose={() => { setAlertf }} />
             <div className="mt-40 place-content-center flex">
                 <div className='flex bg-zinc-400 rounded-xl'>
                     <div>
