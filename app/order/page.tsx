@@ -1,7 +1,7 @@
 'use client'
 
 import Order from '../components/order'
-import AlertToken from '../components/alertToken'
+import AlertToken from '../components/alerttoken'
 import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 import { useRouter } from 'next/navigation'

@@ -87,7 +87,7 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
       <Alert message='เพิ่มออเดอร์สำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
       <AlertF message='เพิ่มออเดอร์ไม่สำเร็จ' detail='' show={setalertf} onClose={() => { setAlertf }} />
-      <AlertI message='เพิ่มออเดอร์ไม่สำเร็จ' detail='' show={setalerti} onClose={() => { setAlerti }} />
+      <AlertI message='กรุณากรอกข้อมูลให้ครบถ้วน' detail='' show={setalerti} onClose={() => { setAlerti }} />
       <div className='bg-green-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">เพิ่มออเดอร์</div>
         <div className="bg-white shadow-xl w-90 p-6 md:w-120">

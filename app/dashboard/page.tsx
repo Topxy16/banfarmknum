@@ -6,7 +6,7 @@ import { useEffect,useState } from 'react'
 import Chart from '../components/chart'
 import Piechart from '../components/piechart'
 import SavingGoal from "../components/goal"
-import AlertToken from '../components/alertToken'
+import AlertToken from '../components/alerttoken'
 import Image from 'next/image'
 import bank from '../../public/bank.jpg'
 import cardwallat from '../../public/08.png'

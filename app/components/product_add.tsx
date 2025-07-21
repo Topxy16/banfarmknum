@@ -81,7 +81,7 @@ export default function AddProductModal({ show, onClose, category }: AddProductM
     <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm flex items-center justify-center">
       <Alert message='เพิ่มสินค้าสำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
       <AlertF message='เพิ่มสินค้าไม่สำเร็จ' detail='' show={setalertf} onClose={() => { setAlertf }} />
-      <AlertI message='เพิ่มสินค้าไม่สำเร็จ' detail='' show={setalerti} onClose={() => { setAlerti }} />
+      <AlertI message='กรุณากรอกข้อมูลให้ครบถ้วน' detail='' show={setalerti} onClose={() => { setAlerti }} />
       <div className='bg-green-900 rounded-xl'>
         <div className="text-3xl font-bold text-white p-4">เพิ่มสินค้า</div>
         <div className="bg-white shadow-xl w-90 max-w-md p-6">

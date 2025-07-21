@@ -1,110 +1,97 @@
-// app/dashboard/profit/page.tsx
-"use client"
+'use client'
 
-import React from "react"
+import { useState } from 'react'
+import AddExpenseModal from '../components/AddExpenseModal'
+import ExpenseForm from '../components/ExpenseForm'
 
-const productionRounds = [
-  {
-    id: 1,
-    date: "10 ก.ค. 2567",
-    unitsSold: 80,
-    pricePerUnit: 100,
-    costs: [
-      { name: "เนย", amount: 2, unit: "ถุง", price: 65 },
-      { name: "น้ำตาล", amount: 2, unit: "ถุง", price: 26 },
-      { name: "หมูหยอง", amount: 20, unit: "ถุง", price: 120 },
-      { name: "แพ็คเกจ", amount: 80, unit: "ซอง", price: 0.8 },
-      { name: "ค่าแรง", amount: 1, unit: "วัน", price: 300 },
-      { name: "แก๊ส", amount: 1, unit: "รอบ", price: 50 },
-    ],
-  },
-]
+export default function FinancePage() {
+  const [selectedPeriod, setSelectedPeriod] = useState('today')
+  const [showModal, setShowModal] = useState(false)
 
-export default function ProfitPage() {
+  const handleAddExpense = (data: any) => {
+    console.log('📦 ส่งข้อมูลทั้งหมด:', data)
+    setShowModal(false)
+  }
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">📊 สรุปกำไร/ขาดทุนต่อรอบ</h1>
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">📊 รายงานการเงิน</h1>
 
-      {productionRounds.map((round) => {
-        const totalRevenue = round.unitsSold * round.pricePerUnit
-        const totalCost = round.costs.reduce(
-          (sum, c) => sum + c.amount * c.price,
-          0
-        )
-        const profit = totalRevenue - totalCost
-        const profitPercent = (profit / totalRevenue) * 100
-
-        return (
-          <div
-            key={round.id}
-            className="bg-white rounded-2xl shadow p-6 mb-8 space-y-4"
+      {/* ตัวเลือกช่วงเวลา */}
+      <div className="flex gap-2 mb-4">
+        {['today', 'week', 'month'].map((p) => (
+          <button
+            key={p}
+            onClick={() => setSelectedPeriod(p)}
+            className={`px-4 py-2 rounded-xl font-semibold ${
+              selectedPeriod === p
+                ? 'bg-green-900 text-white'
+                : 'bg-gray-200 hover:bg-gray-300'
+            }`}
           >
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">รอบวันที่ {round.date}</h2>
-              <span className="text-sm text-gray-500">
-                ขาย {round.unitsSold} ชุด × {round.pricePerUnit} บาท
-              </span>
-            </div>
+            {p === 'today' ? 'วันนี้' : p === 'week' ? 'สัปดาห์นี้' : 'เดือนนี้'}
+          </button>
+        ))}
+      </div>
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="bg-blue-100 rounded-xl p-4">
-                <p className="text-gray-500">รายรับรวม</p>
-                <p className="text-xl font-bold text-blue-700">
-                  {totalRevenue.toLocaleString()} บาท
-                </p>
-              </div>
-              <div className="bg-red-100 rounded-xl p-4">
-                <p className="text-gray-500">รายจ่ายรวม</p>
-                <p className="text-xl font-bold text-red-600">
-                  {totalCost.toLocaleString()} บาท
-                </p>
-              </div>
-              <div className="bg-green-100 rounded-xl p-4">
-                <p className="text-gray-500">กำไรสุทธิ</p>
-                <p className="text-xl font-bold text-green-600">
-                  {profit.toLocaleString()} บาท
-                </p>
-              </div>
-              <div className="bg-yellow-100 rounded-xl p-4">
-                <p className="text-gray-500">% กำไร</p>
-                <p className="text-xl font-bold text-yellow-600">
-                  {profitPercent.toFixed(2)}%
-                </p>
-              </div>
-            </div>
+      {/* Card แสดงผลรวม */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div className="bg-blue-100 rounded-xl p-4">
+          <p className="text-gray-500">รายรับรวม</p>
+          <p className="text-2xl font-bold text-blue-700">12,000 บาท</p>
+        </div>
+        <div className="bg-red-100 rounded-xl p-4">
+          <p className="text-gray-500">รายจ่ายรวม</p>
+          <p className="text-2xl font-bold text-red-600">5,300 บาท</p>
+        </div>
+        <div className="bg-green-100 rounded-xl p-4">
+          <p className="text-gray-500">กำไรสุทธิ</p>
+          <p className="text-2xl font-bold text-green-600">6,700 บาท</p>
+        </div>
+      </div>
 
-            <div>
-              <p className="font-semibold text-gray-700 mt-4 mb-2">
-                รายการต้นทุน:
-              </p>
-              <table className="w-full text-sm text-left border rounded-xl overflow-hidden">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="p-2">วัตถุดิบ</th>
-                    <th className="p-2">จำนวน</th>
-                    <th className="p-2">ราคาต่อหน่วย</th>
-                    <th className="p-2 text-right">รวม</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {round.costs.map((item, idx) => (
-                    <tr key={idx} className="border-t">
-                      <td className="p-2">{item.name}</td>
-                      <td className="p-2">
-                        {item.amount} {item.unit}
-                      </td>
-                      <td className="p-2">{item.price} บาท</td>
-                      <td className="p-2 text-right">
-                        {(item.amount * item.price).toLocaleString()} บาท
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )
-      })}
+      {/* ปุ่มเพิ่มรายการ */}
+      <div className="flex justify-end mb-2">
+        <button
+          className="bg-green-900 text-white px-4 py-2 rounded-xl hover:bg-green-700"
+          onClick={() => setShowModal(true)}
+        >
+          ➕ เพิ่มรายจ่าย
+        </button>
+      </div>
+
+      {/* ตารางรายจ่าย */}
+      <div className="bg-white shadow rounded-xl overflow-hidden">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-gray-100 text-gray-600">
+            <tr>
+              <th className="p-2">ประเภท</th>
+              <th className="p-2">จำนวน</th>
+              <th className="p-2">ราคาต่อหน่วย</th>
+              <th className="p-2 text-right">รวม</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-t">
+              <td className="p-2">แก๊ส</td>
+              <td className="p-2">1 ถัง</td>
+              <td className="p-2">300</td>
+              <td className="p-2 text-right">300 บาท</td>
+            </tr>
+            <tr className="border-t">
+              <td className="p-2">ค่าแรง</td>
+              <td className="p-2">2 วัน</td>
+              <td className="p-2">400</td>
+              <td className="p-2 text-right">800 บาท</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Modal */}
+      <AddExpenseModal show={showModal} onClose={() => setShowModal(false)}>
+        <ExpenseForm onSubmit={handleAddExpense} />
+      </AddExpenseModal>
     </div>
   )
 }

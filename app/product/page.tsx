@@ -1,7 +1,7 @@
 'use client'
 import Product from '../components/product'
 import AddProduct from '../components/product_add'
-import AlertToken from '../components/alertToken'
+import AlertToken from '../components/alerttoken'
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
