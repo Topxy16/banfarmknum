@@ -43,13 +43,13 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
     const cart = []
 
     if (butterQty > 0) {
-      cart.push({ p_ID: 13, p_Amount: butterQty })
+      cart.push({ p_ID: 13, i_Amount: butterQty })
     }
 
     if (porkQty > 0) {
-      cart.push({ p_ID: 14, p_Amount: porkQty })
+      cart.push({ p_ID: 14, i_Amount: porkQty })
     }
-    console.log(user)
+    // console.log(user)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/addOrder`, {
         method: 'POST',
@@ -102,6 +102,7 @@ export default function AddOrderModal({ show, onClose, userData }: AddOrderModal
             <div className='text-sm'>ข้อมูลผู้สั่ง</div>
             <div className='flex gap-2'>
               <select className='w-full rounded-lg p-1.5 bg-gray-200 hover:bg-gray-300' onChange={(e) => (setUser(Number(e.target.value)))}>
+                <option value={Number("0")}> เลือกผู้ใช้งาน</option>
                 {userData.map((item, index) => (
                   <option key={index} value={item.u_ID}>
                     {item.u_userName}
