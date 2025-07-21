@@ -2,10 +2,15 @@
 import Image from 'next/image'
 import loginimg from '../../public/login.png'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Alert from '../components/alertSuccess'
 import AlertF from '../components/alertFail'
+import AlertToken from '../components/alerttoken'
+import { useRouter } from 'next/navigation'
+
 export default function Page() {
+    const [setalerttoken, setAlerttoken] = useState(false)
+    const router = useRouter()
     const [setalert, setAlert] = useState(false)
     const [setalertf, setAlertf] = useState(false)
     const [username, setName] = useState("")
@@ -32,10 +37,31 @@ export default function Page() {
             }, 2000);
         }
     }
+
+    useEffect(() => {
+        const checkToken = async () => {
+            const token = localStorage.getItem('token')
+            const check = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/checkLogin`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const res = await check.json()
+            if (res.status === 1) {
+                router.push('/dashboard')
+                return
+            }
+        }
+        checkToken()
+    }, [])
+
+
     return (
         <div>
             <Alert message='เข้าสู่ระบบสำเร็จ' detail='' show={setalert} onClose={() => { setAlert }} />
-                  <AlertF message='เข้าสู่ระบบไม่สำเร็จ' detail='' show={setalertf} onClose={() => { setAlertf }} />
+            <AlertF message='เข้าสู่ระบบไม่สำเร็จ' detail='' show={setalertf} onClose={() => { setAlertf }} />
+            <AlertToken message='คุณไม่มีสิทธิเข้าถึง' detail='เนื่องจากคุณเข้าใช้งานอยู่' show={setalerttoken} onClose={() => setAlerttoken} />
             <div className="mt-40 place-content-center flex">
                 <div className='flex bg-zinc-400 rounded-xl'>
                     <div>
