@@ -92,7 +92,7 @@ useEffect(() => {
                                     <button onClick={() => {
                                         const updatedCart = cart.map(i =>
                                         i.p_ID === item.p_ID
-                                            ? { ...i, i_Amount: Math.max(0, i.i_Amount - 1)  } 
+                                            ? { ...i, i_Amount: Math.max(1, i.i_Amount - 1)  } 
                                             : i
                                         )
                                         setCart(updatedCart)
@@ -106,7 +106,7 @@ useEffect(() => {
                                     <button onClick={() => {
                                         const updatedCart = cart.map(i =>
                                         i.p_ID === item.p_ID
-                                            ? { ...i, i_Amount: Math.max(0, i.i_Amount + 1) }
+                                            ? { ...i, i_Amount: Math.max(1, i.i_Amount + 1) }
                                             : i
                                         )
                                         setCart(updatedCart)
@@ -139,11 +139,6 @@ useEffect(() => {
                             <div className='opacity-50 text-start mt-8'>ยอดรวม</div>
                             <hr className='opacity-50' />
                             <div className='text-2xl text-end'>{totalPrice}</div>
-                             <input
-                                className='bg-gray-200 hover:bg-gray-300 rounded-xl p-2 w-full'
-                                type="datetime-local"
-                                onChange={(e) => {setSelectedDateTime(e.target.value)}}
-                                />
                             <div className='absolute bottom-0 left-0 w-full p-4'>
                                 <div onClick={HandleAddCart} className='bg-green-900 hover:bg-green-700 text-white p-2 rounded-xl text-center text-2xl'> 
                                     ยืนยันคำสั่งซื้อ

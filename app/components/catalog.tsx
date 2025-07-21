@@ -1,8 +1,7 @@
 "use client"
 import neyor from '../../public/neyor.png'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
-
+import { useRouter } from 'next/navigation'
 type catalogType = {
     p_ID: number,
     p_Name: string,
@@ -19,7 +18,10 @@ type PropsType = {
 }
 
 export default function Catalog({ catalog }: PropsType) {
-    const addToCart = (product: catalogType) => {
+
+    const router = useRouter()
+    const addToCart = (product: catalogType,status : number) => {
+        console.log(status)
         const cartString = localStorage.getItem('cart')
         let cart: { p_ID: number; i_Amount: number }[] = cartString ? JSON.parse(cartString) : []
         const checkCart = cart.some(item => item.p_ID === product.p_ID)
@@ -27,9 +29,15 @@ export default function Catalog({ catalog }: PropsType) {
             alert(`${product.p_Name} มีอยู่ในตะกร้าแล้ว`)
             return
         }
-        cart.push({ ...product, i_Amount: 0 })
+        cart.push({ ...product, i_Amount: 1 })
         localStorage.setItem('cart', JSON.stringify(cart))
-        alert(`เพิ่ม ${product.p_Name} เข้าตะกร้าเรียบร้อย`)
+        if(status == 1) {
+            router.push('/cart')
+            alert(`เพิ่ม ${product.p_Name} เข้าตะกร้าเรียบร้อย`)
+        }else{
+            alert(`เพิ่ม ${product.p_Name} เข้าตะกร้าเรียบร้อย`)
+        }
+        
     }
 
     return (
@@ -48,11 +56,8 @@ export default function Catalog({ catalog }: PropsType) {
                         <div className='truncate w-50 md:w-70'>{item.p_Detail}</div>
                         <div>
                             <div className='flex place-content-between mt-10 md:mt-14'>
-                                <button className='w-40 rounded-xl bg-green-300 p-1 md:w-70'>สั่งสินค้า</button>
-                                <button
-                                    className='w-full rounded-xl bg-green-300 ml-1 p-1'
-                                    onClick={() => addToCart(item)}
-                                >
+                                <button className='w-40 rounded-xl bg-green-300 p-1 md:w-70' onClick={() => addToCart(item,1)} >สั่งสินค้า</button>
+                                <button className='w-full rounded-xl bg-green-300 ml-1 p-1'onClick={() => addToCart(item,0)} >
                                     เพิ่มเข้าตะกร้า
                                 </button>
                             </div>
