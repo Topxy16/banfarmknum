@@ -95,8 +95,9 @@ export default function page() {
         }
     }, [])
     return (
-        <div>
-            <AlertToken message='คุณไม่มีสิทธิเข้าถึง' detail='กรุณาล็อกอินก่อนเข้าใช้งาน' show={setalerttoken} onClose={() => setAlerttoken} />
+        <div className='w-full mx-auto p-4'>
+            <div className='mb-2'>สินค้า</div>
+            
             <div className="bg-white rounded-2xl p-1.5 w-full flex">
                 <div className="bg-zinc-400 flex w-full p-1.5 rounded-2xl place-items-center">
                     <button>
@@ -127,6 +128,7 @@ export default function page() {
                     </div>
                 </div>
             </div>
+            <AlertToken message='คุณไม่มีสิทธิเข้าถึง' detail='กรุณาล็อกอินก่อนเข้าใช้งาน' show={setalerttoken} onClose={() => setAlerttoken} />
         </div>
     )
 }

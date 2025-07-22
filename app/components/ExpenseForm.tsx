@@ -11,7 +11,7 @@ const expenseOptions = [
 
 export default function ExpenseForm({ onSubmit }: { onSubmit: (data: any) => void }) {
   const [inputs, setInputs] = useState([
-    { type: '', amount: 0, price: 0 },
+    { type: '', amount: 0 },
   ])
 
   const handleChange = (index: number, field: string, value: any) => {
@@ -21,7 +21,7 @@ export default function ExpenseForm({ onSubmit }: { onSubmit: (data: any) => voi
   }
 
   const handleAddRow = () => {
-    setInputs([...inputs, { type: '', amount: 0, price: 0 }])
+    setInputs([...inputs, { type: '', amount: 0 }])
   }
 
   const handleSubmit = () => {
@@ -31,7 +31,7 @@ export default function ExpenseForm({ onSubmit }: { onSubmit: (data: any) => voi
   return (
     <div className="space-y-4">
       {inputs.map((input, idx) => (
-        <div key={idx} className="grid grid-cols-3 gap-2 items-center">
+        <div key={idx} className="grid grid-cols-2 gap-2 items-center">
           <select
             className="bg-gray-200 rounded-xl p-2"
             value={input.type}
@@ -51,23 +51,18 @@ export default function ExpenseForm({ onSubmit }: { onSubmit: (data: any) => voi
             value={input.amount}
             onChange={(e) => handleChange(idx, 'amount', Number(e.target.value))}
           />
-          <input
-            type="number"
-            placeholder="ราคา/หน่วย"
-            className="bg-gray-200 rounded-xl p-2"
-            value={input.price}
-            onChange={(e) => handleChange(idx, 'price', Number(e.target.value))}
-          />
         </div>
       ))}
 
-      <button
-        onClick={handleAddRow}
-        className="text-green-700 hover:text-green-900 text-sm"
-      >
-        ➕ เพิ่มรายการ
-      </button>
 
+      <div className='flex justify-end'>
+        <button
+          onClick={handleAddRow}
+          className="text-green-700 hover:text-green-900 text-sm"
+        >
+          เพิ่มรายการ +
+        </button>
+      </div>
       <div className="text-right">
         <button
           onClick={handleSubmit}
